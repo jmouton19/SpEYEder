@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   cards.forEach(function (card, index) {
     let isTitle = true;
-    let isRed = true;
 
     card.addEventListener("click", function () {
       if (!isTitle) {
@@ -17,15 +16,18 @@ document.addEventListener("DOMContentLoaded", function () {
         card.querySelector("h1").textContent = "YOUR DATA....";
       }
 
-      if (isRed) {
-        card.style.background = "blue";
-      } else {
-        card.style.background = "red";
-      }
-
       isTitle = !isTitle;
-      isRed = !isRed;
       card.classList.toggle("flipped");
     });
+  });
+
+  const googleButton = document.getElementById("googleButton");
+  googleButton.addEventListener("click", function () {
+    window.open("https://google.com");
+  });
+
+  const githubButton = document.getElementById("githubButton");
+  githubButton.addEventListener("click", function () {
+    window.open("https://github.com");
   });
 });
