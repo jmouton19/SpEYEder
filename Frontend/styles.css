@@ -1,0 +1,45 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar {
+  width: 100vw;
+  height: 30vh;
+}
+
+.pwned {
+  width: 20vw;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: green;
+}
+
+.card {
+  width: 40vw;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: red;
+  transition: transform 0.5s ease;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.card.flipped h1 {
+  transform: rotateY(-180deg);
+}
