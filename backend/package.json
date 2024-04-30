@@ -1,0 +1,25 @@
+{
+  "name": "speyeder",
+  "version": "1.0.0",
+  "description": "See what the web sees. Your one-stop visibility hub.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BBD-GRADS/SpEYEder.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BBD-GRADS/SpEYEder/issues"
+  },
+  "homepage": "https://github.com/BBD-GRADS/SpEYEder#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
