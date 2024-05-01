@@ -4,65 +4,106 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: start;
+  font-family: sans-serif;
+  background: rgba(135, 130, 130, 1);
+  background-image: url("./assets/web.png");
+  background-size: contain;
+  background-position: left center;
+  background-repeat: no-repeat;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
 
 .mainContent {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
-.navbar {
+.header {
   width: 100vw;
-  height: 30vh;
-}
-
-.pwned {
-  width: 10vw;
-  height: 80vh;
-  padding: 5vh 5vw;
+  height: 10vh;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
   display: flex;
-  flex-direction: column;
-  background: #6f7687;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.card {
-  width: 30vw;
-  height: 80vh;
-  padding: 5vh 5vw;
+.spider {
+  max-width: auto;
+  max-height: 20vh;
+}
+
+.dataBreach {
+  width: 18vw;
   display: flex;
+  padding: 1vh 1vw;
+  margin: 0.5em 0;
   flex-direction: column;
-  background: #4d6294;
-  transition: transform 0.5s ease;
+  background: transparent;
+  border: 0.1em solid red;
 }
 
-.flipped {
+.dataBreachHeading {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.dataBreach h2 {
+  color: white;
+  text-decoration: underline;
+}
+
+.pwnedLogo {
+  height: 10%;
+  width: auto;
+}
+
+.flipCard {
+  background-color: transparent;
+  width: 35vw;
+  height: 80vh;
+  padding: 0.5em;
+}
+
+.flipCardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flipCard:hover .flipCardInner {
   transform: rotateY(180deg);
 }
 
-.card.flipped h1 {
-  transform: rotateY(-180deg);
+.flipCardFront,
+.flipCardBack {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
-.card.flipped img {
-  transform: rotateY(-180deg);
+.flipCardFront {
+  background: rgba(217, 217, 217, 1);
 }
 
-.card.flipped button {
-  transform: rotateY(-180deg);
+.flipCardBack {
+  background: rgba(217, 217, 217, 1);
+  transform: rotateY(180deg);
 }
-
-.card.flipped h2 {
-  transform: rotateY(-180deg);
-}
-
-button {
-  border-radius: 0.5em;
-  background: white;
-  border: transparent;
-}
-
-/* img {
-  height: 20vh;
-  width: 20vw;
-} */
