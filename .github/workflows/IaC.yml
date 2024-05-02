@@ -1,0 +1,53 @@
+name: Deploy AWS Infrastructure
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'Terraform/**'
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  Deploy-Infrastructure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ vars.ROLE_ARN }}
+          role-session-name: ${{ vars.ROLE_SESSION_NAME }}
+          aws-region: ${{ vars.AWS_REGION }}
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.6
+      
+      - name: Terraform Init 
+        id: init
+        working-directory: ./terraform
+        run: terraform init 
+
+      - name: Terraform Validate
+        id: validate
+        working-directory: ./Terraform
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: ./Terraform
+        run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: ./Terraform
+        run: terraform apply -auto-approve
+      
