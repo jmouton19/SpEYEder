@@ -1,6 +1,6 @@
 terraform {
   backend "s3"{
-  bucket = "temporaty-testing-terraform-backend"
+  bucket = "speyeder-terraform-state-store"
   key = "terrraform.tfstate"
   region = "eu-west-1"
   }
