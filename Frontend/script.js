@@ -1,11 +1,22 @@
-document.addEventListener("DOMContentLoaded", function () {});
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("googleLoginButton").addEventListener("click", login);
+});
 
 //For testing purposes
 
-document.getElementById("authButton").addEventListener("click", () => {
+function login() {
+  console.log("clicked");
+  var isLoggedIn = false;
   const backendUrl = "http://localhost:8080/auth/google";
   window.location.href = backendUrl;
-});
+  //TODO: Check if user logged in to update the variable
+  var isLoggedIn = true;
+
+  if (isLoggedIn) {
+    document.getElementById("loginSection").style.display = "none";
+    document.getElementById("mainContent").style.display = "flex";
+  }
+}
 
 function fetchProtectedData() {
   const apiUrl = "http://localhost:8080/pwned/pwnedemail";
