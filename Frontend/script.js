@@ -31,10 +31,53 @@ function fetchProtectedData() {
       }
       return response.json();
     })
-    .then((data) => console.log("Protected data:", data))
+    .then((data) => {
+      data.forEach(renderPwnedCard);
+      document.getElementById("checkPwnedButton").style.display = "none";
+    })
     .catch((error) => console.error("Failed to fetch protected data:", error));
 }
 
 document
   .getElementById("checkPwnedButton")
   .addEventListener("click", fetchProtectedData);
+
+function renderPwnedCard(data) {
+  const dataBreachCard = document.createElement("section");
+  dataBreachCard.classList.add("dataBreachCard");
+
+  const dataBreachCardText = document.createElement("section");
+  dataBreachCardText.classList.add("dataBreachCardText");
+
+  const dataClassesArray = Array.isArray(data.DataClasses)
+    ? data.DataClasses
+    : [data.DataClasses];
+
+  const dataClassesHTML = dataClassesArray
+    .map((dataClass) => `<h6> - ${dataClass}</h6>`)
+    .join("");
+
+  dataBreachCardText.innerHTML = `
+  <div class="nameAndLogoContainer">
+    <h4>${data.Name}</h4>
+  </div>
+  <h5>Breach Date:</h5>
+  <h6>${data.BreachDate}</h6>
+  <h5>What was leaked:</h5>
+  ${dataClassesHTML}
+`;
+
+  const logoImage = document.createElement("img");
+  logoImage.classList.add("dataBreachCardLogo");
+  logoImage.src = data.LogoPath;
+  logoImage.alt = "Company Logo";
+
+  const nameAndLogoContainer = dataBreachCardText.querySelector(
+    ".nameAndLogoContainer"
+  );
+  nameAndLogoContainer.appendChild(logoImage);
+
+  dataBreachCard.appendChild(dataBreachCardText);
+
+  document.getElementById("dataBreachContainer").appendChild(dataBreachCard);
+}
