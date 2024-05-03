@@ -10,7 +10,7 @@ on:
 
 jobs:
   run-migrations:
-    name: Test flyway migration scripts
+    name: Run migrations scripts
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
