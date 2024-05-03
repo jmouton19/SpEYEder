@@ -29,5 +29,5 @@ jobs:
 
       - name: s3 sync
         id: sync
-        working-directory: FrontEnd
+        working-directory: Frontend
         run: aws s3 sync . s3://${{ vars.AWS_S3_WEB_BUCKET }}
