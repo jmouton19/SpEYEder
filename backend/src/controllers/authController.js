@@ -3,6 +3,8 @@ const https = require("https");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 
+const oneDayInMs = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
 const googleAuth = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
@@ -42,9 +44,20 @@ const googleAuthCallback = (req, res) => {
     tokenResponse.on("data", (chunk) => (data += chunk));
     tokenResponse.on("end", () => {
       const { id_token, refresh_token } = JSON.parse(data);
-      res.redirect(
-        `${config.frontendUrl}?idToken=${id_token}&refreshToken=${refresh_token}`
-      );
+      // Set cookies
+      res.cookie("idToken", id_token, {
+        httpOnly: true,
+        //secure: true,
+        sameSite: "None",
+        maxAge: 30 * oneDayInMs,
+      });
+      res.cookie("refreshToken", refresh_token, {
+        httpOnly: true,
+        //secure: true,
+        sameSite: "None",
+        maxAge: 30 * oneDayInMs,
+      });
+      res.redirect(`${config.frontendUrl}`);
     });
   });
 
@@ -58,7 +71,15 @@ const googleAuthCallback = (req, res) => {
 };
 
 const refreshIDToken = (req, res) => {
-  const { refreshToken } = req.body;
+  // Retrieve refreshToken from either the cookie or the request body
+  const refreshTokenFromBody = req.body.refreshToken;
+  const refreshTokenFromCookie = req.cookies?.refreshToken;
+  const refreshToken = refreshTokenFromBody || refreshTokenFromCookie;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: "No refresh token provided" });
+  }
+
   const postData = querystring.stringify({
     client_id: config.googleClientId,
     client_secret: config.googleClientSecret,
@@ -86,6 +107,20 @@ const refreshIDToken = (req, res) => {
         if (newTokens.error) {
           throw new Error(newTokens.error_description);
         }
+
+        res.cookie("idToken", newTokens.id_token, {
+          httpOnly: true,
+          //secure: true,
+          sameSite: "None",
+          maxAge: 30 * oneDayInMs,
+        });
+        res.cookie("refreshToken", newTokens.refresh_token || refreshToken, {
+          httpOnly: true,
+          // secure: true,
+          sameSite: "None",
+          maxAge: 30 * oneDayInMs,
+        });
+        //remove
         res.json({
           idToken: newTokens.id_token,
           expiresIn: newTokens.expires_in,

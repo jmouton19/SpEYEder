@@ -5,9 +5,18 @@ const client = new OAuth2Client(config.googleClientId);
 
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1]; // Bearer <token>
+  const tokenFromHeader = authHeader && authHeader.split(" ")[1]; // Assumes "Bearer <token>"
 
-  if (!token) return res.sendStatus(401);
+  const tokenFromCookie = req.cookies.idToken;
+
+  // Use the token from the header if available, otherwise use the token from the cookie
+  const token = tokenFromHeader || tokenFromCookie;
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "No authentication token provided." });
+  }
 
   try {
     const ticket = await client.verifyIdToken({
@@ -15,11 +24,11 @@ const authenticateToken = async (req, res, next) => {
       audience: config.googleClientId,
     });
     const payload = ticket.getPayload();
-    req.user = payload;
-    next();
+    req.user = payload; // Attach user info to the request object
+    next(); // Pass control to the next middleware function
   } catch (error) {
     console.error("Error verifying Google ID token:", error);
-    return res.sendStatus(403);
+    return res.status(403).json({ message: "Invalid or expired token." });
   }
 };
 
