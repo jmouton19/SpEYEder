@@ -1,0 +1,29 @@
+name: Run Database Migration with Flyway
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'Database/Migrations/**'
+
+  workflow_dispatch:
+
+jobs:
+  run-migrations:
+    name: Test flyway migration scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update
+        run: sudo apt update
+
+      - name: install snapd
+        run: sudo apt install snapd
+
+      - name: Install Flyway 
+        run: sudo snap install flyway
+
+      - name: Run flyway
+        run: flyway migrate -url=${{ vars.DB_URL }} -user=${{ vars.DB_USER }} -password=${{ secrets.DB_PASSWORD }}
