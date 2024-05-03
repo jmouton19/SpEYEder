@@ -1,0 +1,33 @@
+name: Deploy Website to S3
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'Frontend/**'
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  Deploy-Website:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ vars.ROLE_ARN }}
+          role-session-name: ${{ vars.ROLE_SESSION_NAME }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: s3 sync
+        id: sync
+        working-directory: Frontend
+        run: aws s3 sync . s3://${{ vars.AWS_S3_WEB_BUCKET }}
