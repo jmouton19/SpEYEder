@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'FrontEnd/**'
+      - 'Frontend/**'
 
   workflow_dispatch:
 
