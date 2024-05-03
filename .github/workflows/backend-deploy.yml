@@ -1,0 +1,50 @@
+name: Uplaod Node.js App to AWS Beanstalk
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'backend/**'
+
+  workflow_dispatch:
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ vars.ROLE_ARN }}
+          role-session-name: ${{ vars.ROLE_SESSION_NAME }}
+          aws-region: ${{ vars.AWS_REGION }}
+          output-credentials: true
+        id: creds
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'latest'
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Zip application
+        working-directory: backend
+        run: zip -r application.zip . 
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v15
+        with:
+            aws_access_key: ${{ steps.creds.outputs.aws-access-key-id }}
+            aws_secret_key: ${{ steps.creds.outputs.aws-secret-access-key }}
+            region: ${{ vars.AWS_REGION }}
+            application_name: 'speyeder-app'
+            environment_name: 'speyeder-env'
+            version_label: 'v${{ github.run_number }}'
+            deployment_package: 'backend/application.zip'
