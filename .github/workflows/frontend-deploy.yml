@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  Deploy-Infrastructure:
+  Deploy-Website:
     runs-on: ubuntu-latest
 
     steps:
