@@ -8,8 +8,6 @@ const authenticateToken = async (req, res, next) => {
   const tokenFromHeader = authHeader && authHeader.split(" ")[1]; // Assumes "Bearer <token>"
 
   const tokenFromCookie = req.cookies.idToken;
-
-  // Retrieve refreshToken from either the cookie or the request header
   const token = tokenFromHeader || tokenFromCookie;
 
   if (!token) {

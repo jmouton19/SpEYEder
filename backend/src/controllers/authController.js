@@ -43,7 +43,7 @@ const googleAuthCallback = (req, res) => {
     let data = "";
     tokenResponse.on("data", (chunk) => (data += chunk));
     tokenResponse.on("end", () => {
-      const { id_token, refresh_token } = JSON.parse(data);
+      const { id_token, refresh_token, access_token } = JSON.parse(data);
       // Set cookies
       res.cookie("idToken", id_token, {
         httpOnly: true,
@@ -52,6 +52,12 @@ const googleAuthCallback = (req, res) => {
         maxAge: 30 * oneDayInMs,
       });
       res.cookie("refreshToken", refresh_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        maxAge: 30 * oneDayInMs,
+      });
+      res.cookie("accessToken", access_token, {
         httpOnly: true,
         secure: true,
         sameSite: "None",
@@ -73,7 +79,7 @@ const googleAuthCallback = (req, res) => {
 const refreshIDToken = (req, res) => {
   // Retrieve refreshToken from either the cookie or the request body
   const refreshTokenFromBody = req.body.refreshToken;
-  const refreshTokenFromCookie = req.cookies?.refreshToken;
+  const refreshTokenFromCookie = req.cookies.refreshToken;
   const refreshToken = refreshTokenFromBody || refreshTokenFromCookie;
 
   if (!refreshToken) {
@@ -120,12 +126,13 @@ const refreshIDToken = (req, res) => {
           sameSite: "None",
           maxAge: 30 * oneDayInMs,
         });
-        //remove useless
-        res.json({
-          idToken: newTokens.id_token,
-          expiresIn: newTokens.expires_in,
-          refreshToken: newTokens.refresh_token || refreshToken,
+        res.cookie("accessToken", newTokens.access_token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "None",
+          maxAge: 30 * oneDayInMs,
         });
+        res.sendStatus(200);
       } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Failed to refresh token" });

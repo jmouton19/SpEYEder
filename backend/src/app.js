@@ -2,6 +2,7 @@ const express = require("express");
 const { json } = require("express");
 const pwnedRoutes = require("./routes/pwnedRoutes");
 const authRoutes = require("./routes/authRoutes");
+const detailsRoutes = require("./routes/detailsRoutes");
 const authenticateToken = require("./middleware/authMiddleware");
 const { frontendUrl } = require("./config");
 const cors = require("cors");
@@ -22,6 +23,7 @@ app.use(cors(corsOptions));
 // Routes
 app.use("/auth", authRoutes);
 app.use("/pwned", authenticateToken, pwnedRoutes);
+app.use("/details", authenticateToken, detailsRoutes);
 
 // Test route with authentication middleware
 app.get("/test", authenticateToken, (req, res) => {
