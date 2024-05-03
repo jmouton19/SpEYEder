@@ -47,13 +47,13 @@ const googleAuthCallback = (req, res) => {
       // Set cookies
       res.cookie("idToken", id_token, {
         httpOnly: true,
-        //secure: true,
+        secure: true,
         sameSite: "None",
         maxAge: 30 * oneDayInMs,
       });
       res.cookie("refreshToken", refresh_token, {
         httpOnly: true,
-        //secure: true,
+        secure: true,
         sameSite: "None",
         maxAge: 30 * oneDayInMs,
       });
@@ -110,17 +110,17 @@ const refreshIDToken = (req, res) => {
 
         res.cookie("idToken", newTokens.id_token, {
           httpOnly: true,
-          //secure: true,
+          secure: true,
           sameSite: "None",
           maxAge: 30 * oneDayInMs,
         });
         res.cookie("refreshToken", newTokens.refresh_token || refreshToken, {
           httpOnly: true,
-          // secure: true,
+          secure: true,
           sameSite: "None",
           maxAge: 30 * oneDayInMs,
         });
-        //remove
+        //remove useless
         res.json({
           idToken: newTokens.id_token,
           expiresIn: newTokens.expires_in,

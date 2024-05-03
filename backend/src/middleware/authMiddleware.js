@@ -9,7 +9,7 @@ const authenticateToken = async (req, res, next) => {
 
   const tokenFromCookie = req.cookies.idToken;
 
-  // Use the token from the header if available, otherwise use the token from the cookie
+  // Retrieve refreshToken from either the cookie or the request header
   const token = tokenFromHeader || tokenFromCookie;
 
   if (!token) {
