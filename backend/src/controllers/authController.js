@@ -42,19 +42,8 @@ const googleAuthCallback = (req, res) => {
     tokenResponse.on("data", (chunk) => (data += chunk));
     tokenResponse.on("end", () => {
       const { id_token, refresh_token } = JSON.parse(data);
-      //const userProfile = jwt.decode(id_token);
-      // const jwtToken = jwt.sign(
-      //   { sub: userProfile.sub, email: userProfile.email },
-      //   config.jwtSecret,
-      //   { expiresIn: "1h" }
-      // );
-      // const refreshToken = jwt.sign(
-      //   { sub: userProfile.sub },
-      //   config.refreshTokenSecret,
-      //   { expiresIn: "7d" }
-      // );
       res.redirect(
-        `${config.frontendUrl}?accessToken=${id_token}&refreshToken=${refresh_token}`
+        `${config.frontendUrl}?idToken=${id_token}&refreshToken=${refresh_token}`
       );
     });
   });
@@ -68,7 +57,7 @@ const googleAuthCallback = (req, res) => {
   tokenRequest.end();
 };
 
-const refreshAccessToken = (req, res) => {
+const refreshIDToken = (req, res) => {
   const { refreshToken } = req.body;
   const postData = querystring.stringify({
     client_id: config.googleClientId,
@@ -98,7 +87,7 @@ const refreshAccessToken = (req, res) => {
           throw new Error(newTokens.error_description);
         }
         res.json({
-          accessToken: newTokens.access_token,
+          idToken: newTokens.id_token,
           expiresIn: newTokens.expires_in,
           refreshToken: newTokens.refresh_token || refreshToken,
         });
@@ -121,5 +110,5 @@ const refreshAccessToken = (req, res) => {
 module.exports = {
   googleAuth,
   googleAuthCallback,
-  refreshAccessToken,
+  refreshIDToken,
 };

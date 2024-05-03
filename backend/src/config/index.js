@@ -7,6 +7,7 @@ const config = {
   jwtSecret: process.env.JWT_SECRET,
   frontendUrl: process.env.FRONTEND_URL,
   refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+  pwnedApiKey: process.env.PWNED_API_KEY,
 };
 
 module.exports = config;
