@@ -1,13 +1,28 @@
 require("dotenv").config();
 
 const config = {
+  // Server port
+  port: process.env.PORT || 8080,
+
+  // Google OAuth settings
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   redirectUri: process.env.REDIRECT_URI,
-  jwtSecret: process.env.JWT_SECRET,
+
+  // Frontend URL
   frontendUrl: process.env.FRONTEND_URL,
-  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET,
+
+  // API Keys
   pwnedApiKey: process.env.PWNED_API_KEY,
+
+  // Database connection settings
+  db: {
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT || 5432, // Default PostgreSQL port
+  },
 };
 
 module.exports = config;

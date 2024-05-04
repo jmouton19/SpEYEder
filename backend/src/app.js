@@ -3,7 +3,7 @@ const { json } = require("express");
 const pwnedRoutes = require("./routes/pwnedRoutes");
 const authRoutes = require("./routes/authRoutes");
 const detailsRoutes = require("./routes/detailsRoutes");
-const authenticateToken = require("./middleware/authMiddleware");
+const authenticateSession = require("./middleware/authMiddleware");
 const { frontendUrl } = require("./config");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -22,11 +22,11 @@ app.use(cors(corsOptions));
 
 // Routes
 app.use("/auth", authRoutes);
-app.use("/pwned", authenticateToken, pwnedRoutes);
-app.use("/details", authenticateToken, detailsRoutes);
+app.use("/pwned", authenticateSession, pwnedRoutes);
+app.use("/details", authenticateSession, detailsRoutes);
 
 // Test route with authentication middleware
-app.get("/test", authenticateToken, (req, res) => {
+app.get("/test", authenticateSession, (req, res) => {
   res.json({ message: "Authenticated!", user: req.user });
 });
 

@@ -1,12 +1,13 @@
 const querystring = require("querystring");
 const https = require("https");
 const jwt = require("jsonwebtoken");
+const userDAO = require("../models/userDAO");
+const sessionDAO = require("../models/sessionDAO");
+const userAuthCompanyDAO = require("../models/userAuthCompanyDAO");
+const provider = require("../models/provider");
 const config = require("../config");
 
-const oneDayInMs = 24 * 60 * 60 * 1000;
-const oneHrInMs = 60 * 60 * 1000;
-
-const googleAuth = (req, res) => {
+const login = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
     redirect_uri: config.redirectUri,
@@ -20,7 +21,6 @@ const googleAuth = (req, res) => {
   const authUrl = `${rootUrl}?${querystring.stringify(options)}`;
   res.redirect(authUrl);
 };
-
 const googleAuthCallback = (req, res) => {
   const { code } = req.query;
   const values = querystring.stringify({
@@ -40,143 +40,109 @@ const googleAuthCallback = (req, res) => {
     },
   };
 
-  const tokenRequest = https.request(tokenOptions, (tokenResponse) => {
-    let data = "";
-    tokenResponse.on("data", (chunk) => (data += chunk));
-    tokenResponse.on("end", () => {
-      const { id_token, refresh_token, access_token } = JSON.parse(data);
-      // Set cookies
-      res.cookie("idToken", id_token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: oneHrInMs,
-      });
-      res.cookie("accessToken", access_token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: oneHrInMs,
-      });
-      res.cookie("refreshToken", refresh_token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: 30 * oneDayInMs,
-      });
-
-      res.redirect(`${config.frontendUrl}`);
-    });
-  });
-
-  tokenRequest.on("error", (e) => {
-    console.error(e);
-    res.status(500).json({ error: "Authentication failed" });
-  });
-
-  tokenRequest.write(values);
-  tokenRequest.end();
-};
-
-const refreshIDToken = (req, res) => {
-  // Retrieve refreshToken from either the cookie or the request body
-  const refreshTokenFromBody = req.body.refreshToken;
-  const refreshTokenFromCookie = req.cookies.refreshToken;
-  const refreshToken = refreshTokenFromBody || refreshTokenFromCookie;
-
-  if (!refreshToken) {
-    return res.status(401).json({ message: "No refresh token provided" });
-  }
-
-  const postData = querystring.stringify({
-    client_id: config.googleClientId,
-    client_secret: config.googleClientSecret,
-    refresh_token: refreshToken,
-    grant_type: "refresh_token",
-  });
-
-  const options = {
-    hostname: "oauth2.googleapis.com",
-    path: "/token",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  };
-
-  const tokenRequest = https.request(options, (tokenResponse) => {
+  const tokenRequest = https.request(tokenOptions, async (tokenResponse) => {
     let data = "";
     tokenResponse.on("data", (chunk) => {
       data += chunk;
     });
-    tokenResponse.on("end", () => {
+    tokenResponse.on("end", async () => {
       try {
-        const newTokens = JSON.parse(data);
-        if (newTokens.error) {
-          throw new Error(newTokens.error_description);
+        const { id_token, refresh_token, access_token, expires_in } =
+          JSON.parse(data);
+        const decoded = jwt.decode(id_token);
+        const email = decoded.email;
+
+        let user = await userDAO.findUserByEmail(email);
+        if (!user) {
+          user = await userDAO.createUser(email);
+        }
+        const existingAuth =
+          await userAuthCompanyDAO.findUserAuthCompanyByUserIdAndProvider(
+            user.userId,
+            provider.GOOGLE
+          );
+        if (!existingAuth.length) {
+          await userAuthCompanyDAO.updateUserAuthCompany(
+            user.userId,
+            provider.GOOGLE,
+            access_token,
+            refresh_token,
+            new Date(Date.now() + expires_in * 1000)
+          );
+        } else {
+          await userAuthCompanyDAO.addUserAuthCompany(
+            user.userId,
+            provider.GOOGLE,
+            access_token,
+            refresh_token,
+            new Date(Date.now() + expires_in * 1000)
+          );
         }
 
-        res.cookie("idToken", newTokens.id_token, {
+        const expTime = 30 * 24 * 60 * 60;
+        const session = await sessionDAO.createSession(
+          user.userId,
+          new Date(Date.now() + expTime * 1000)
+        );
+
+        res.cookie("sessionID", session.sessionId, {
           httpOnly: true,
           secure: true,
           sameSite: "None",
-          maxAge: oneHrInMs,
+          maxAge: expTime * 1000, // 30 days in milliseconds
         });
-        res.cookie("accessToken", newTokens.access_token, {
-          httpOnly: true,
+        res.cookie("loggedIn", true, {
+          httpOnly: false,
           secure: true,
           sameSite: "None",
-          maxAge: oneHrInMs,
+          maxAge: expTime * 1000, // 30 days in milliseconds
         });
-        res.cookie("refreshToken", newTokens.refresh_token || refreshToken, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "None",
-          maxAge: 30 * oneDayInMs,
-        });
-        res.sendStatus(200);
+
+        res.redirect(`${config.frontendUrl}`);
       } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Failed to refresh token" });
+        res.status(500).json({ error: "Login failed" });
       }
     });
   });
 
   tokenRequest.on("error", (e) => {
     console.error(e);
-    res.status(500).json({ message: "Error refreshing token" });
+    res.status(500).json({ error: "Login failed" });
   });
 
-  tokenRequest.write(postData);
+  tokenRequest.write(values);
   tokenRequest.end();
 };
 
-const logout = (req, res) => {
-  res.cookie("idToken", "", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    expires: new Date(0),
-  });
-  res.cookie("accessToken", "", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    expires: new Date(0),
-  });
-  res.cookie("refreshToken", "", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    expires: new Date(0),
-  });
+const logout = async (req, res) => {
+  const sessionId = req.session.sessionId;
 
-  res.sendStatus(200);
+  try {
+    await sessionDAO.deleteSession(sessionId);
+
+    res.clearCookie("sessionID", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+    res.cookie("loggedIn", false, {
+      httpOnly: false,
+      secure: true,
+      sameSite: "None",
+    });
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Logout failed:", error);
+    res.status(500).json({ message: "Failed to logout." });
+  }
 };
+
+module.exports = logout;
 
 module.exports = {
   logout,
-  googleAuth,
+  login,
   googleAuthCallback,
-  refreshIDToken,
 };
