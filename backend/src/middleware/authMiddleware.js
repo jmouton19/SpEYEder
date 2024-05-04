@@ -1,5 +1,5 @@
-const config = require("../Config");
-const SessionDAO = require("../Models/SessionDAO");
+const config = require("../config");
+const sessionDAO = require("../models/sessionDAO");
 
 const authenticateSession = async (req, res, next) => {
   const sessionID = req.cookies.sessionID;
@@ -9,7 +9,7 @@ const authenticateSession = async (req, res, next) => {
   }
 
   try {
-    const session = await SessionDAO.getSessionById(sessionID);
+    const session = await sessionDAO.getSessionById(sessionID);
     if (!session) {
       return res
         .status(403)

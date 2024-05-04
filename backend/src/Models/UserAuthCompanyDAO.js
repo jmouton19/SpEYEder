@@ -1,5 +1,5 @@
-const pool = require("../Config/db");
-const UserAuthCompany = require("./UserAuthCompany");
+const pool = require("../config/db");
+const userAuthCompany = require("./userAuthCompany");
 
 const tableName = "user_auth_companies";
 
@@ -20,7 +20,7 @@ const userAuthCompanyDAO = {
     const { user_id, provider_id, access_token, refresh_token, expires_in } =
       rows[0];
 
-    return UserAuthCompany(
+    return userAuthCompany(
       user_id,
       provider_id,
       access_token,
@@ -50,7 +50,7 @@ const userAuthCompanyDAO = {
     const { user_id, provider_id, access_token, refresh_token, expires_in } =
       rows[0];
 
-    return UserAuthCompany(
+    return userAuthCompany(
       user_id,
       provider_id,
       access_token,
@@ -59,23 +59,23 @@ const userAuthCompanyDAO = {
     );
   },
 
-  async findSocialCompaniesByUserIdAndProvider(userId, providerId) {
+  async findUserAuthCompanyByUserIdAndProvider(userId, providerId) {
     const { rows } = await pool.query(
       `SELECT * FROM ${tableName} WHERE user_id = $1 AND provider_id = $2;`,
       [userId, providerId]
     );
-    if (rows.length === 0) return [];
-    return rows.map((row) => {
-      const { user_id, provider_id, access_token, refresh_token, expires_in } =
-        row;
-      return UserAuthCompany(
-        user_id,
-        provider_id,
-        access_token,
-        refresh_token,
-        expires_in
-      );
-    });
+    if (rows.length === 0) return null;
+
+    const { user_id, provider_id, access_token, refresh_token, expires_in } =
+      rows[0];
+
+    return userAuthCompany(
+      user_id,
+      provider_id,
+      access_token,
+      refresh_token,
+      expires_in
+    );
   },
 };
 

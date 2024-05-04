@@ -1,8 +1,8 @@
-const pool = require("../Config/db");
-const Session = require("./Session");
+const pool = require("../config/db");
+const session = require("./session");
 const tableName = "sessions";
 
-const SessionDAO = {
+const sessionDAO = {
   async createSession(userId, expiresAt, data = null) {
     const { rows } = await pool.query(
       `INSERT INTO ${tableName} (user_id, expires_at, data)
@@ -10,7 +10,7 @@ const SessionDAO = {
       [userId, expiresAt, data]
     );
     if (rows.length === 0) return null;
-    return Session(
+    return session(
       rows[0].session_id,
       userId,
       rows[0].created_at,
@@ -26,7 +26,7 @@ const SessionDAO = {
     );
     if (rows.length === 0) return null;
     const row = rows[0];
-    return Session(
+    return session(
       row.session_id,
       row.user_id,
       row.created_at,
@@ -42,4 +42,4 @@ const SessionDAO = {
   },
 };
 
-module.exports = SessionDAO;
+module.exports = sessionDAO;

@@ -1,7 +1,8 @@
 const https = require("https");
 const querystring = require("querystring");
-const UserAuthCompanyDAO = require("../Models/UserAuthCompanyDAO");
-const Provider = require("../Models/Provider");
+const UserAuthCompanyDAO = require("../models/userAuthCompanyDAO");
+const Provider = require("../models/provider");
+const config = require("../config");
 
 async function refreshGoogleTokens(userId, refreshToken) {
   const postData = querystring.stringify({
@@ -37,7 +38,7 @@ async function refreshGoogleTokens(userId, refreshToken) {
               newTokens.refresh_token || refreshToken,
               new Date(Date.now() + newTokens.expires_in * 1000)
             );
-            resolve();
+            resolve(newTokens.access_token);
           } catch (error) {
             console.error("Failed to parse tokens:", error);
             reject(error);

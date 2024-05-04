@@ -1,4 +1,4 @@
-function createSession(sessionId, userId, createdAt, expiresAt, data = null) {
+function session(sessionId, userId, createdAt, expiresAt, data = null) {
   return {
     sessionId,
     userId,
@@ -8,4 +8,4 @@ function createSession(sessionId, userId, createdAt, expiresAt, data = null) {
   };
 }
 
-module.exports = createSession;
+module.exports = session;

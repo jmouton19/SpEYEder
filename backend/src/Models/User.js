@@ -1,4 +1,4 @@
-function User(userId, email, createdAt) {
+function user(userId, email, createdAt) {
   return {
     userId,
     email,
@@ -6,4 +6,4 @@ function User(userId, email, createdAt) {
   };
 }
 
-module.exports = User;
+module.exports = user;

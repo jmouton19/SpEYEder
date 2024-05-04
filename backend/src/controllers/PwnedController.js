@@ -1,8 +1,20 @@
 const https = require("https");
-const { pwnedApiKey } = require("../Config");
+const { pwnedApiKey } = require("../config");
+const userDAO = require("../models/userDAO");
 
-const checkPwned = (req, res) => {
-  const email = req.query.email || req.user.email;
+const checkPwned = async (req, res) => {
+  let email = null;
+
+  if (!req.query.email) {
+    email = (await userDAO.findUserById(req.session.userId)).email;
+  } else {
+    email = req.query.email;
+  }
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required." });
+  }
+
   const options = {
     hostname: "haveibeenpwned.com",
     path: `/api/v3/breachedaccount/${email}?truncateResponse=false`,

@@ -1,6 +1,6 @@
-const Provider = {
+const provider = {
   GOOGLE: 1,
   GITHUB: 2,
 };
 
-module.exports = Provider;
+module.exports = provider;

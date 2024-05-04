@@ -1,4 +1,4 @@
-function UserAuthCompany(
+function userAuthCompany(
   userId,
   provider,
   accessToken,
@@ -14,4 +14,4 @@ function UserAuthCompany(
   };
 }
 
-module.exports = UserAuthCompany;
+module.exports = userAuthCompany;

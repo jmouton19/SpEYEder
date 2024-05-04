@@ -1,11 +1,11 @@
 const querystring = require("querystring");
 const https = require("https");
 const jwt = require("jsonwebtoken");
-const UserDAO = require("../Models/UserDAO");
-const SessionDAO = require("../Models/SessionDAO");
-const UserAuthCompanyDAO = require("../Models/UserAuthCompanyDAO");
-const Provider = require("../Models/Provider");
-const config = require("../Config");
+const userDAO = require("../models/userDAO");
+const sessionDAO = require("../models/sessionDAO");
+const userAuthCompanyDAO = require("../models/userAuthCompanyDAO");
+const provider = require("../models/provider");
+const config = require("../config");
 
 const login = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -52,27 +52,27 @@ const googleAuthCallback = (req, res) => {
         const decoded = jwt.decode(id_token);
         const email = decoded.email;
 
-        let user = await UserDAO.findUserByEmail(email);
+        let user = await userDAO.findUserByEmail(email);
         if (!user) {
-          user = await UserDAO.createUser(email);
+          user = await userDAO.createUser(email);
         }
         const existingAuth =
-          await UserAuthCompanyDAO.findSocialCompaniesByUserIdAndProvider(
+          await userAuthCompanyDAO.findUserAuthCompanyByUserIdAndProvider(
             user.userId,
-            Provider.GOOGLE
+            provider.GOOGLE
           );
-        if (existingAuth.length > 0) {
-          await UserAuthCompanyDAO.updateUserAuthCompany(
+        if (!existingAuth.length) {
+          await userAuthCompanyDAO.updateUserAuthCompany(
             user.userId,
-            Provider.GOOGLE,
+            provider.GOOGLE,
             access_token,
             refresh_token,
             new Date(Date.now() + expires_in * 1000)
           );
         } else {
-          await UserAuthCompanyDAO.addUserAuthCompany(
+          await userAuthCompanyDAO.addUserAuthCompany(
             user.userId,
-            Provider.GOOGLE,
+            provider.GOOGLE,
             access_token,
             refresh_token,
             new Date(Date.now() + expires_in * 1000)
@@ -80,13 +80,19 @@ const googleAuthCallback = (req, res) => {
         }
 
         const expTime = 30 * 24 * 60 * 60;
-        const session = await SessionDAO.createSession(
+        const session = await sessionDAO.createSession(
           user.userId,
           new Date(Date.now() + expTime * 1000)
         );
 
         res.cookie("sessionID", session.sessionId, {
           httpOnly: true,
+          secure: true,
+          sameSite: "None",
+          maxAge: expTime * 1000, // 30 days in milliseconds
+        });
+        res.cookie("loggedIn", true, {
+          httpOnly: false,
           secure: true,
           sameSite: "None",
           maxAge: expTime * 1000, // 30 days in milliseconds
@@ -113,10 +119,15 @@ const logout = async (req, res) => {
   const sessionId = req.session.sessionId;
 
   try {
-    await SessionDAO.deleteSession(sessionId);
+    await sessionDAO.deleteSession(sessionId);
 
     res.clearCookie("sessionID", {
       httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+    res.cookie("loggedIn", false, {
+      httpOnly: false,
       secure: true,
       sameSite: "None",
     });
