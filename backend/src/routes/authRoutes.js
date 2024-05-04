@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  googleAuth,
+  login,
   googleAuthCallback,
   refreshIDToken,
   logout,
@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 
-router.get("/google", googleAuth);
+router.get("/login", login);
 router.get("/google/callback", googleAuthCallback);
 router.post("/refresh", refreshIDToken);
 router.post("/logout", logout);

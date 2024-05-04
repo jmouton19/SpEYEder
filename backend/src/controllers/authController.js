@@ -1,12 +1,12 @@
 const querystring = require("querystring");
 const https = require("https");
 const jwt = require("jsonwebtoken");
-const config = require("../config");
+const config = require("../config/config");
 
 const oneDayInMs = 24 * 60 * 60 * 1000;
 const oneHrInMs = 60 * 60 * 1000;
 
-const googleAuth = (req, res) => {
+const login = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
     redirect_uri: config.redirectUri,
@@ -176,7 +176,7 @@ const logout = (req, res) => {
 
 module.exports = {
   logout,
-  googleAuth,
+  login,
   googleAuthCallback,
   refreshIDToken,
 };

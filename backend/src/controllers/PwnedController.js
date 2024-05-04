@@ -1,5 +1,5 @@
 const https = require("https");
-const { pwnedApiKey } = require("../config");
+const { pwnedApiKey } = require("../config/config");
 
 const checkPwned = (req, res) => {
   const email = req.query.email || req.user.email;

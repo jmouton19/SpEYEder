@@ -4,7 +4,7 @@ const pwnedRoutes = require("./routes/pwnedRoutes");
 const authRoutes = require("./routes/authRoutes");
 const detailsRoutes = require("./routes/detailsRoutes");
 const authenticateToken = require("./middleware/authMiddleware");
-const { frontendUrl } = require("./config");
+const { frontendUrl } = require("./config/config");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
