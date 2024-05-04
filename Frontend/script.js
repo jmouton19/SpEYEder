@@ -1,24 +1,56 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+  if (!checkIfLoggedIn()) {
+    console.log("not logged in");
+    showLoginScreen;
+  } else {
+    console.log("logged in");
+    showMainContent;
+  }
+
+  document
+    .getElementById("checkPwnedButton")
+    .addEventListener("click", displayPwnedInfo);
+  document
+    .getElementById("logoutButton")
+    .addEventListener("click", showLoginScreen);
   document.getElementById("googleLoginButton").addEventListener("click", login);
 });
 
-//For testing purposes
-
 function login() {
-  console.log("clicked");
-  var isLoggedIn = false;
   const backendUrl = "http://localhost:8080/auth/google";
   window.location.href = backendUrl;
-  //TODO: Check if user logged in to update the variable
-  var isLoggedIn = true;
-
-  if (isLoggedIn) {
-    document.getElementById("loginSection").style.display = "none";
-    document.getElementById("mainContent").style.display = "flex";
-  }
 }
 
-function fetchProtectedData() {
+async function checkIfLoggedIn() {
+  const apiUrl = "http://localhost:8080/auth/refresh";
+
+  await fetch(apiUrl, {
+    method: "POST",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (response.ok) {
+        return true;
+      }
+    })
+    .catch((error) => console.error(error));
+
+  return false;
+}
+
+function showLoginScreen() {
+  document.getElementById("loginSection").style.display = "flex";
+  document.getElementById("mainContent").style.display = "none";
+  document.getElementById("logoutButton").style.display = "none";
+}
+
+function showMainContent() {
+  document.getElementById("loginSection").style.display = "flex";
+  document.getElementById("mainContent").style.display = "none";
+  document.getElementById("logoutButton").style.display = "none";
+}
+
+function displayPwnedInfo() {
   const apiUrl = "http://localhost:8080/pwned/pwnedemail";
 
   fetch(apiUrl, {
@@ -37,10 +69,6 @@ function fetchProtectedData() {
     })
     .catch((error) => console.error("Failed to fetch protected data:", error));
 }
-
-document
-  .getElementById("checkPwnedButton")
-  .addEventListener("click", fetchProtectedData);
 
 function renderPwnedCard(data) {
   const dataBreachCard = document.createElement("section");
