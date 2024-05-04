@@ -9,22 +9,35 @@
   <body>
     <section class="header">
       <h1>SpEYEder</h1>
-      <button id="authButton">Log In with Google</button>
+      <button id="logoutButton">Logout</button>
     </section>
 
-    <section class="content">
+    <section id="loginSection">
+      <section class="loginHeadings">
+        <h1>Welcome to SpEYEder</h1>
+        <h3>See what the web sees.</h3>
+        <h3>Your one-stop visibility hub.</h3>
+        <button id="googleLoginButton">Log In with Google</button>
+      </section>
+      <section class="loginSpiderImage">
+        <img class="spider" src="./assets/spider.png" alt="Spider Image" />
+      </section>
+    </section>
+
+    <section id="mainContent">
       <aside class="dataBreach">
         <section class="dataBreachHeading">
           <h2>Data Breaches</h2>
-          <button id="checkPwnedButton">Check If Pwned</button>
           <img
             class="pwnedLogo"
             src="./assets/pwnedLogo.png"
             alt="Have I been PWNed Logo"
           />
         </section>
+        <div id="dataBreachContainer"></div>
+        <button id="checkPwnedButton">Have I been Pwned?</button>
       </aside>
-      <section class="mainContent">
+      <section class="cardContent">
         <section class="flipCard">
           <section class="flipCardInner">
             <section class="flipCardFront">
