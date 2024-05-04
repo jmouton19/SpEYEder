@@ -1,8 +1,59 @@
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const testGoogleData = {
+  names: {
+    displayName: "Liam Talberg",
+    familyName: "Talberg",
+    givenName: "Liam",
+    displayNameLastFirst: "Talberg, Liam",
+    unstructuredName: "Liam Talberg",
+  },
+  photos: {
+    url: "https://lh3.googleusercontent.com/a/ACg8ocIkhU2g9k1YNo_6kdSQsey4ivGTUnZAKUaiQs_K3QLv4JfUhCU=s100",
+  },
+  emailAddresses: {
+    value: "liamtalberg@gmail.com",
+  },
+  phoneNumbers: {
+    value: "+1234567890",
+  },
+
+  genders: {
+    value: "male",
+    formattedValue: "Male",
+  },
+  birthdays: {
+    date: {
+      month: 6,
+      day: 3,
+    },
+  },
+  occupations: {
+    value: "Dev",
+  },
+};
+
 document.addEventListener("DOMContentLoaded", async function () {
   //On website load check if the user is logged in to determine what screen to show
   let isUserLoggedIn = await checkIfLoggedIn();
   if (isUserLoggedIn) {
     showMainContent();
+    //Comment out: displayGoogleInfo and uncomment renderGoogleInfo to show testData
+    displayGoogleInfo();
+    // renderGoogleInfo(testGoogleData);
   } else {
     showLoginScreen();
   }
@@ -17,6 +68,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 //Performs the login
 function login() {
+  //TODO: This route will change
   const backendUrl = "http://localhost:8080/auth/google";
   window.location.href = backendUrl;
 }
@@ -94,6 +146,7 @@ function displayPwnedInfo() {
     .catch((error) => console.error("Failed to fetch Pwned data:", error));
 }
 
+//Render Pwned info card and add it to the parent container
 function renderPwnedCard(data) {
   const dataBreachCard = document.createElement("section");
   dataBreachCard.classList.add("dataBreachCard");
@@ -132,4 +185,85 @@ function renderPwnedCard(data) {
   dataBreachCard.appendChild(dataBreachCardText);
 
   document.getElementById("dataBreachContainer").appendChild(dataBreachCard);
+}
+
+//Loads in the the Google data and calls method to render it
+function displayGoogleInfo() {
+  const apiUrl = "http://localhost:8080/details/gmail";
+
+  fetch(apiUrl, {
+    method: "GET",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch: " + response.statusText);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      renderGoogleInfo(data);
+    })
+    .catch((error) => console.error("Failed to fetch Google data:", error));
+}
+
+function renderGoogleInfo(data) {
+  const googleInfoItem = document.createElement("section");
+  googleInfoItem.classList.add("googleInfoContent");
+
+  for (const key in data) {
+    if (Object.hasOwnProperty.call(data, key)) {
+      const value = data[key];
+      if (value) {
+        const heading = document.createElement("h4");
+        const paragraph = document.createElement("p");
+
+        switch (key) {
+          case "photos":
+            heading.textContent = "Profile Picture:";
+            const imageContainer = document.createElement("div");
+            imageContainer.classList.add("imageContainer");
+            const image = document.createElement("img");
+            image.src = value.url;
+            image.alt = "Profile Picture";
+            imageContainer.appendChild(heading);
+            imageContainer.appendChild(image);
+            googleInfoItem.appendChild(imageContainer);
+            continue;
+          case "names":
+            heading.textContent = "Name:";
+            paragraph.textContent = `${value.givenName} ${value.familyName}`;
+            break;
+          case "phoneNumbers":
+            heading.textContent = "Phone Number:";
+            paragraph.textContent = value.value;
+            break;
+          case "emailAddresses":
+            heading.textContent = "Email Address:";
+            paragraph.textContent = value.value;
+            break;
+          case "genders":
+            heading.textContent = "Gender:";
+            paragraph.textContent = value.formattedValue;
+            break;
+          case "birthdays":
+            heading.textContent = "Birthday:";
+            const birthday = value.date;
+            const monthWord = monthNames[birthday.month - 1];
+            paragraph.textContent = `${birthday.day} ${monthWord}`;
+            break;
+          case "occupations":
+            heading.textContent = "Occupations:";
+            paragraph.textContent = value.value;
+            break;
+          default:
+            continue;
+        }
+        googleInfoItem.appendChild(heading);
+        googleInfoItem.appendChild(paragraph);
+      }
+    }
+  }
+
+  document.getElementById("googleInfoContainer").appendChild(googleInfoItem);
 }
