@@ -1,61 +1,85 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  if (!checkIfLoggedIn()) {
-    console.log("not logged in");
-    showLoginScreen;
+  //On website load check if the user is logged in to determine what screen to show
+  let isUserLoggedIn = await checkIfLoggedIn();
+  if (isUserLoggedIn) {
+    showMainContent();
   } else {
-    console.log("logged in");
-    showMainContent;
+    showLoginScreen();
   }
 
+  //Create listeners for all the buttons
   document
     .getElementById("checkPwnedButton")
     .addEventListener("click", displayPwnedInfo);
-  document
-    .getElementById("logoutButton")
-    .addEventListener("click", showLoginScreen);
+  document.getElementById("logoutButton").addEventListener("click", logOut);
   document.getElementById("googleLoginButton").addEventListener("click", login);
 });
 
+//Performs the login
 function login() {
   const backendUrl = "http://localhost:8080/auth/google";
   window.location.href = backendUrl;
 }
 
+//Makes API call to logout + show the login screen
+async function logOut() {
+  const apiUrl = "http://localhost:8080/auth/logout";
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      showLoginScreen();
+    }
+  } catch (error) {
+    console.error("Failed to fetch Pwned data:", error);
+  }
+}
+
+//Calls the refresh endpoint to check if the user is logged in
 async function checkIfLoggedIn() {
   const apiUrl = "http://localhost:8080/auth/refresh";
 
-  await fetch(apiUrl, {
-    method: "POST",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (response.ok) {
-        return true;
-      }
-    })
-    .catch((error) => console.error(error));
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      credentials: "include",
+    });
 
-  return false;
+    if (response.ok) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error("Failed to fetch Pwned data:", error);
+    return false;
+  }
 }
 
+//Shows the login screen + hides the main content
 function showLoginScreen() {
   document.getElementById("loginSection").style.display = "flex";
   document.getElementById("mainContent").style.display = "none";
   document.getElementById("logoutButton").style.display = "none";
 }
 
+//Shows the main content and hides hte login screen
 function showMainContent() {
-  document.getElementById("loginSection").style.display = "flex";
-  document.getElementById("mainContent").style.display = "none";
-  document.getElementById("logoutButton").style.display = "none";
+  document.getElementById("loginSection").style.display = "none";
+  document.getElementById("mainContent").style.display = "flex";
+  document.getElementById("logoutButton").style.display = "flex";
 }
 
+//Loads in the the PWNed information cards
 function displayPwnedInfo() {
   const apiUrl = "http://localhost:8080/pwned/pwnedemail";
 
   fetch(apiUrl, {
     method: "GET",
-    credentials: "include", //cookies
+    credentials: "include",
   })
     .then((response) => {
       if (!response.ok) {
@@ -67,7 +91,7 @@ function displayPwnedInfo() {
       data.forEach(renderPwnedCard);
       document.getElementById("checkPwnedButton").style.display = "none";
     })
-    .catch((error) => console.error("Failed to fetch protected data:", error));
+    .catch((error) => console.error("Failed to fetch Pwned data:", error));
 }
 
 function renderPwnedCard(data) {
