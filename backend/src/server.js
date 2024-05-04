@@ -1,6 +1,7 @@
 const app = require("./app");
-const config = require("./config");
+const config = require("./Config");
 
-app.listen(config.port, () => {
+const port = config.port;
+app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

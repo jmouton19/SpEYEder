@@ -1,5 +1,5 @@
 const https = require("https");
-const config = require("../config/config");
+const config = require("../Config");
 const { cleanGmailProfileData } = require("../utils/gmailProfileDataCleaner");
 
 const getGoogleUserData = (req, res) => {

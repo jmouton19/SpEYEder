@@ -1,9 +1,9 @@
-class User {
-  constructor(userId, email, createdAt) {
-    this.userId = userId;
-    this.email = email;
-    this.createdAt = createdAt;
-  }
+function User(userId, email, createdAt) {
+  return {
+    userId,
+    email,
+    createdAt,
+  };
 }
 
 module.exports = User;

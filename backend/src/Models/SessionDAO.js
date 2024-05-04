@@ -1,15 +1,22 @@
 const pool = require("../Config/db");
-
+const Session = require("./Session");
 const tableName = "sessions";
 
 const SessionDAO = {
   async createSession(userId, expiresAt, data = null) {
     const { rows } = await pool.query(
       `INSERT INTO ${tableName} (user_id, expires_at, data)
-            VALUES ($1, $2, $3) RETURNING *;`,
+             VALUES ($1, $2, $3) RETURNING *;`,
       [userId, expiresAt, data]
     );
-    return rows[0];
+    if (rows.length === 0) return null;
+    return Session(
+      rows[0].session_id,
+      userId,
+      rows[0].created_at,
+      expiresAt,
+      data
+    );
   },
 
   async getSessionById(sessionId) {
@@ -17,7 +24,15 @@ const SessionDAO = {
       `SELECT * FROM ${tableName} WHERE session_id = $1;`,
       [sessionId]
     );
-    return rows[0];
+    if (rows.length === 0) return null;
+    const row = rows[0];
+    return Session(
+      row.session_id,
+      row.user_id,
+      row.created_at,
+      row.expires_at,
+      row.data
+    );
   },
 
   async deleteSession(sessionId) {

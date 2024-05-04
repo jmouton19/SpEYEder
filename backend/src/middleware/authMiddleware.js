@@ -1,33 +1,29 @@
-const { OAuth2Client } = require("google-auth-library");
-const config = require("../config/config");
+const config = require("../Config");
+const SessionDAO = require("../Models/SessionDAO");
 
-const client = new OAuth2Client(config.googleClientId);
+const authenticateSession = async (req, res, next) => {
+  const sessionID = req.cookies.sessionID;
 
-const authenticateToken = async (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const tokenFromHeader = authHeader && authHeader.split(" ")[1]; // Assumes "Bearer <token>"
-
-  const tokenFromCookie = req.cookies.idToken;
-  const token = tokenFromHeader || tokenFromCookie;
-
-  if (!token) {
-    return res
-      .status(401)
-      .json({ message: "No authentication token provided." });
+  if (!sessionID) {
+    return res.status(401).json({ message: "No session token provided." });
   }
 
   try {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: config.googleClientId,
-    });
-    const payload = ticket.getPayload();
-    req.user = payload; // Attach user info to the request object
+    const session = await SessionDAO.getSessionById(sessionID);
+    if (!session) {
+      return res
+        .status(403)
+        .json({ message: "Invalid or expired session token." });
+    }
+
+    req.session = session;
     next(); // Pass control to the next middleware function
   } catch (error) {
-    console.error("Error verifying Google ID token:", error);
-    return res.status(403).json({ message: "Invalid or expired token." });
+    console.error("Error verifying session token:", error);
+    return res
+      .status(403)
+      .json({ message: "Invalid or expired session token." });
   }
 };
 
-module.exports = authenticateToken;
+module.exports = authenticateSession;
