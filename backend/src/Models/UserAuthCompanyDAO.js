@@ -6,22 +6,23 @@ const tableName = "user_auth_companies";
 const userAuthCompanyDAO = {
   async addUserAuthCompany(
     userId,
-    provider,
+    providerId,
     accessToken,
     refreshToken,
     expiresIn
   ) {
     const { rows } = await pool.query(
-      `INSERT INTO ${tableName} (user_id, provider, access_token, refresh_token, expires_in)
+      `INSERT INTO ${tableName} (user_id, provider_id, access_token, refresh_token, expires_in)
        VALUES ($1, $2, $3, $4, $5) RETURNING *;`,
-      [userId, provider, accessToken, refreshToken, expiresIn]
+      [userId, providerId, accessToken, refreshToken, expiresIn]
     );
     if (rows.length === 0) return null;
-    const { user_id, access_token, refresh_token, expires_in } = rows[0];
+    const { user_id, provider_id, access_token, refresh_token, expires_in } =
+      rows[0];
 
     return UserAuthCompany(
       user_id,
-      provider,
+      provider_id,
       access_token,
       refresh_token,
       expires_in
@@ -30,7 +31,7 @@ const userAuthCompanyDAO = {
 
   async updateUserAuthCompany(
     userId,
-    provider,
+    providerId,
     accessToken,
     refreshToken,
     expiresIn
@@ -40,34 +41,36 @@ const userAuthCompanyDAO = {
      access_token = $3, 
      refresh_token = $4, 
      expires_in = $5
-     WHERE user_id = $1 AND provider = $2
+     WHERE user_id = $1 AND provider_id = $2
      RETURNING *;`,
-      [userId, provider, accessToken, refreshToken, expiresIn]
+      [userId, providerId, accessToken, refreshToken, expiresIn]
     );
     if (rows.length === 0) return null;
 
-    const { user_id, access_token, refresh_token, expires_in } = rows[0];
+    const { user_id, provider_id, access_token, refresh_token, expires_in } =
+      rows[0];
 
     return UserAuthCompany(
       user_id,
-      provider,
+      provider_id,
       access_token,
       refresh_token,
       expires_in
     );
   },
 
-  async findSocialCompaniesByUserIdAndProvider(userId, provider) {
+  async findSocialCompaniesByUserIdAndProvider(userId, providerId) {
     const { rows } = await pool.query(
-      `SELECT * FROM ${tableName} WHERE user_id = $1 AND provider = $2;`,
-      [userId, provider]
+      `SELECT * FROM ${tableName} WHERE user_id = $1 AND provider_id = $2;`,
+      [userId, providerId]
     );
     if (rows.length === 0) return [];
     return rows.map((row) => {
-      const { user_id, access_token, refresh_token, expires_in } = row;
+      const { user_id, provider_id, access_token, refresh_token, expires_in } =
+        row;
       return UserAuthCompany(
         user_id,
-        provider,
+        provider_id,
         access_token,
         refresh_token,
         expires_in

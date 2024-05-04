@@ -7,9 +7,6 @@ const UserAuthCompanyDAO = require("../Models/UserAuthCompanyDAO");
 const Provider = require("../Models/Provider");
 const config = require("../Config");
 
-const oneDayInMs = 24 * 60 * 60 * 1000;
-const oneHrInMs = 60 * 60 * 1000;
-
 const login = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
@@ -82,16 +79,17 @@ const googleAuthCallback = (req, res) => {
           );
         }
 
+        const expTime = 30 * 24 * 60 * 60;
         const session = await SessionDAO.createSession(
           user.userId,
-          new Date(Date.now() + expires_in * 1000)
+          new Date(Date.now() + expTime * 1000)
         );
 
         res.cookie("sessionID", session.sessionId, {
           httpOnly: true,
           secure: true,
           sameSite: "None",
-          maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
+          maxAge: expTime * 1000, // 30 days in milliseconds
         });
 
         res.redirect(`${config.frontendUrl}`);
@@ -111,28 +109,26 @@ const googleAuthCallback = (req, res) => {
   tokenRequest.end();
 };
 
-const logout = (req, res) => {
-  res.cookie("idToken", "", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    expires: new Date(0),
-  });
-  res.cookie("accessToken", "", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    expires: new Date(0),
-  });
-  res.cookie("refreshToken", "", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    expires: new Date(0),
-  });
+const logout = async (req, res) => {
+  const sessionId = req.session.sessionId;
 
-  res.sendStatus(200);
+  try {
+    await SessionDAO.deleteSession(sessionId);
+
+    res.clearCookie("sessionID", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    });
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Logout failed:", error);
+    res.status(500).json({ message: "Failed to logout." });
+  }
 };
+
+module.exports = logout;
 
 module.exports = {
   logout,
