@@ -3,7 +3,8 @@ const https = require("https");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 
-const oneDayInMs = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+const oneDayInMs = 24 * 60 * 60 * 1000;
+const oneHrInMs = 60 * 60 * 1000;
 
 const googleAuth = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -49,7 +50,13 @@ const googleAuthCallback = (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "None",
-        maxAge: 30 * oneDayInMs,
+        maxAge: oneHrInMs,
+      });
+      res.cookie("accessToken", access_token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        maxAge: oneHrInMs,
       });
       res.cookie("refreshToken", refresh_token, {
         httpOnly: true,
@@ -57,12 +64,7 @@ const googleAuthCallback = (req, res) => {
         sameSite: "None",
         maxAge: 30 * oneDayInMs,
       });
-      res.cookie("accessToken", access_token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
-        maxAge: 30 * oneDayInMs,
-      });
+
       res.redirect(`${config.frontendUrl}`);
     });
   });
@@ -118,15 +120,15 @@ const refreshIDToken = (req, res) => {
           httpOnly: true,
           secure: true,
           sameSite: "None",
-          maxAge: 30 * oneDayInMs,
+          maxAge: oneHrInMs,
         });
-        res.cookie("refreshToken", newTokens.refresh_token || refreshToken, {
+        res.cookie("accessToken", newTokens.access_token, {
           httpOnly: true,
           secure: true,
           sameSite: "None",
-          maxAge: 30 * oneDayInMs,
+          maxAge: oneHrInMs,
         });
-        res.cookie("accessToken", newTokens.access_token, {
+        res.cookie("refreshToken", newTokens.refresh_token || refreshToken, {
           httpOnly: true,
           secure: true,
           sameSite: "None",
@@ -149,7 +151,31 @@ const refreshIDToken = (req, res) => {
   tokenRequest.end();
 };
 
+const logout = (req, res) => {
+  res.cookie("idToken", "", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    expires: new Date(0),
+  });
+  res.cookie("accessToken", "", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    expires: new Date(0),
+  });
+  res.cookie("refreshToken", "", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    expires: new Date(0),
+  });
+
+  res.sendStatus(200);
+};
+
 module.exports = {
+  logout,
   googleAuth,
   googleAuthCallback,
   refreshIDToken,
