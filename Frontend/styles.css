@@ -79,8 +79,6 @@ body {
 
 #mainContent {
   display: none;
-  flex-direction: row;
-  justify-content: left;
   flex-wrap: wrap;
 }
 
@@ -202,16 +200,16 @@ body {
 
 .cardContent {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .flipCard {
   background-color: transparent;
-  width: 35vw;
-  height: 82.5vh;
+  min-width: 500px;
+  height: 40vh;
   padding: 0.5em;
+  margin: 0 0.5em;
 }
 
 .flipCardInner {
@@ -240,6 +238,7 @@ body {
   backface-visibility: hidden;
 }
 .flipCardFront {
+  height: 40vh;
   background: rgba(217, 217, 217, 1);
   font-size: 16px;
 }
@@ -249,7 +248,7 @@ body {
 }
 
 .flipCardFront img {
-  width: 20vw;
+  width: 10vw;
   height: auto;
 }
 
@@ -258,24 +257,24 @@ body {
   transform: rotateY(180deg);
 }
 
-.googleInfoContent {
+.infoContent {
   column-count: 2;
   column-gap: 20px;
   padding: 15vh 0;
-  height: 67.5vh;
+  height: 35vh;
 }
 
-.googleInfoContent h4 {
+.infoContent h4 {
   text-align: start;
   font-size: calc(0.85vh + 0.85vw);
 }
 
-.googleInfoContent p {
+.infoContent p {
   text-align: start;
   font-size: calc(0.75vh + 0.75vw);
 }
 
-.googleInfoContent img {
+.infoContent img {
   align-self: flex-start;
   width: 5vw;
   height: auto;
