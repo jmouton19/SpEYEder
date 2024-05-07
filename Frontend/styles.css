@@ -30,7 +30,7 @@ body {
 }
 
 #loginSection {
-  display: none;
+  display: flex;
   flex-direction: row;
   color: white;
   background: rgba(50, 48, 48, 0.9);
@@ -78,7 +78,7 @@ body {
 }
 
 #mainContent {
-  display: flex;
+  display: none;
   flex-direction: row;
   justify-content: left;
   flex-wrap: wrap;

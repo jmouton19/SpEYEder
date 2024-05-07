@@ -51,7 +51,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   let isUserLoggedIn = await checkIfLoggedIn();
   if (isUserLoggedIn) {
     showMainContent();
-    //Comment out: displayGoogleInfo and uncomment renderGoogleInfo to show testData
     displayGoogleInfo();
     // renderGoogleInfo(testGoogleData);
   } else {
@@ -69,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 //Performs the login
 function login() {
   //TODO: This route will change
-  const backendUrl = "http://localhost:8080/auth/google";
+  const backendUrl = "http://localhost:8080/auth/login";
   window.location.href = backendUrl;
 }
 
@@ -92,11 +91,12 @@ async function logOut() {
 
 //Calls the refresh endpoint to check if the user is logged in
 async function checkIfLoggedIn() {
-  const apiUrl = "http://localhost:8080/auth/refresh";
+  //TODO: Need a new endpoint
+  const apiUrl = "TODO";
 
   try {
     const response = await fetch(apiUrl, {
-      method: "POST",
+      method: "GET",
       credentials: "include",
     });
 
@@ -106,7 +106,7 @@ async function checkIfLoggedIn() {
       return false;
     }
   } catch (error) {
-    console.error("Failed to fetch Pwned data:", error);
+    console.error("Failed to check if user is logged in:", error);
     return false;
   }
 }
@@ -158,29 +158,41 @@ function renderPwnedCard(data) {
     ? data.DataClasses
     : [data.DataClasses];
 
-  const dataClassesHTML = dataClassesArray
-    .map((dataClass) => `<h6> - ${dataClass}</h6>`)
-    .join("");
+  const dataClassesElements = dataClassesArray.map((dataClass) => {
+    const dataClassElement = document.createElement("h6");
+    dataClassElement.textContent = ` - ${dataClass}`;
+    return dataClassElement;
+  });
 
-  dataBreachCardText.innerHTML = `
-  <div class="nameAndLogoContainer">
-    <h4>${data.Name}</h4>
-  </div>
-  <h5>Breach Date:</h5>
-  <h6>${data.BreachDate}</h6>
-  <h5>What was leaked:</h5>
-  ${dataClassesHTML}
-`;
+  const nameAndLogoContainer = document.createElement("div");
+  nameAndLogoContainer.classList.add("nameAndLogoContainer");
+
+  const companyName = document.createElement("h4");
+  companyName.textContent = data.Name;
+  nameAndLogoContainer.appendChild(companyName);
 
   const logoImage = document.createElement("img");
   logoImage.classList.add("dataBreachCardLogo");
   logoImage.src = data.LogoPath;
   logoImage.alt = "Company Logo";
-
-  const nameAndLogoContainer = dataBreachCardText.querySelector(
-    ".nameAndLogoContainer"
-  );
   nameAndLogoContainer.appendChild(logoImage);
+
+  const breachDateHeader = document.createElement("h5");
+  breachDateHeader.textContent = "Breach Date:";
+
+  const breachDate = document.createElement("h6");
+  breachDate.textContent = data.BreachDate;
+
+  const leakedDataHeader = document.createElement("h5");
+  leakedDataHeader.textContent = "What was leaked:";
+
+  dataBreachCardText.appendChild(nameAndLogoContainer);
+  dataBreachCardText.appendChild(breachDateHeader);
+  dataBreachCardText.appendChild(breachDate);
+  dataBreachCardText.appendChild(leakedDataHeader);
+  dataClassesElements.forEach((dataClassElement) => {
+    dataBreachCardText.appendChild(dataClassElement);
+  });
 
   dataBreachCard.appendChild(dataBreachCardText);
 
