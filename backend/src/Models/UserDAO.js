@@ -1,5 +1,5 @@
 const pool = require("../config/db");
-const user = require("./user");
+const user = require("./User");
 
 const tableName = "users";
 

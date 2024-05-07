@@ -1,5 +1,5 @@
 const config = require("../config");
-const sessionDAO = require("../models/sessionDAO");
+const sessionDAO = require("../Models/SessionDAO");
 
 const authenticateSession = async (req, res, next) => {
   const sessionID = req.cookies.sessionID;

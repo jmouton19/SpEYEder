@@ -1,6 +1,6 @@
 const https = require("https");
 const { pwnedApiKey } = require("../config");
-const userDAO = require("../models/userDAO");
+const userDAO = require("../Models/UserDAO");
 
 const checkPwned = async (req, res) => {
   let email = null;

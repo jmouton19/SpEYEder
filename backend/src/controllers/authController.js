@@ -1,10 +1,10 @@
 const querystring = require("querystring");
 const https = require("https");
 const jwt = require("jsonwebtoken");
-const userDAO = require("../models/userDAO");
-const sessionDAO = require("../models/sessionDAO");
-const userAuthCompanyDAO = require("../models/userAuthCompanyDAO");
-const provider = require("../models/provider");
+const userDAO = require("../Models/UserDAO");
+const sessionDAO = require("../Models/SessionDAO");
+const userAuthCompanyDAO = require("../Models/UserAuthCompanyDAO");
+const provider = require("../Models/Provider");
 const config = require("../config");
 
 const login = (req, res) => {

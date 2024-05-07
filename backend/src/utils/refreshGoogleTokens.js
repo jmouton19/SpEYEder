@@ -1,7 +1,7 @@
 const https = require("https");
 const querystring = require("querystring");
-const UserAuthCompanyDAO = require("../models/userAuthCompanyDAO");
-const Provider = require("../models/provider");
+const UserAuthCompanyDAO = require("../Models/UserAuthCompanyDAO");
+const Provider = require("../Models/Provider");
 const config = require("../config");
 
 async function refreshGoogleTokens(userId, refreshToken) {

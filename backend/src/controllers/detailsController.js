@@ -1,7 +1,7 @@
 const https = require("https");
 const { cleanGmailProfileData } = require("../utils/gmailProfileDataCleaner");
-const userAuthCompanyDAO = require("../models/userAuthCompanyDAO");
-const provider = require("../models/provider");
+const userAuthCompanyDAO = require("../Models/UserAuthCompanyDAO");
+const provider = require("../Models/Provider");
 const { refreshGoogleTokens } = require("../utils/refreshGoogleTokens");
 
 const getGoogleUserData = async (req, res) => {
