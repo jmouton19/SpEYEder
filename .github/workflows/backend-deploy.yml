@@ -69,6 +69,7 @@ jobs:
         run: zip -r application.zip . 
 
       - name: Deploy to Elastic Beanstalk
+        timeout-minutes: 4
         uses: einaregilsson/beanstalk-deploy@v15
         with:
             aws_access_key: ${{ steps.creds.outputs.aws-access-key-id }}
@@ -78,4 +79,4 @@ jobs:
             environment_name: 'speyeder-env'
             version_label: 'v${{ github.run_number }}'
             deployment_package: 'backend/application.zip'
-            wait_for_environment_recovery: 200
+            wait_for_environment_recovery: 180
