@@ -1,5 +1,5 @@
 const pool = require("../config/db");
-const session = require("./session");
+const session = require("./Session");
 const tableName = "sessions";
 
 const sessionDAO = {

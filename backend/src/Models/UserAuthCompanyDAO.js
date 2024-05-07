@@ -1,5 +1,5 @@
 const pool = require("../config/db");
-const userAuthCompany = require("./userAuthCompany");
+const userAuthCompany = require("./UserAuthCompany");
 
 const tableName = "user_auth_companies";
 
