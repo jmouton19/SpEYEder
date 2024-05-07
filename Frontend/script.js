@@ -46,12 +46,15 @@ const testGoogleData = {
   },
 };
 
+const baseURL = "http://localhost:8080";
+
 document.addEventListener("DOMContentLoaded", async function () {
   //On website load check if the user is logged in to determine what screen to show
   let isUserLoggedIn = await checkIfLoggedIn();
   if (isUserLoggedIn) {
     showMainContent();
     displayGoogleInfo();
+    displayGitHubInfo();
     // renderGoogleInfo(testGoogleData);
   } else {
     showLoginScreen();
@@ -63,17 +66,25 @@ document.addEventListener("DOMContentLoaded", async function () {
     .addEventListener("click", displayPwnedInfo);
   document.getElementById("logoutButton").addEventListener("click", logOut);
   document.getElementById("googleLoginButton").addEventListener("click", login);
+  document
+    .getElementById("githubLoginButton")
+    .addEventListener("click", githubLogin);
 });
 
 //Performs the login
 function login() {
-  const backendUrl = "http://localhost:8080/auth/login";
+  const backendUrl = baseURL + "/auth/login";
+  window.location.href = backendUrl;
+}
+
+function githubLogin() {
+  const backendUrl = baseURL + "/auth/github";
   window.location.href = backendUrl;
 }
 
 //Makes API call to logout + show the login screen
 async function logOut() {
-  const apiUrl = "http://localhost:8080/auth/logout";
+  const apiUrl = baseURL + "/auth/logout";
   try {
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -90,8 +101,7 @@ async function logOut() {
 
 //Calls the refresh endpoint to check if the user is logged in
 async function checkIfLoggedIn() {
-  //TODO: Need a new endpoint
-  const apiUrl = "TODO";
+  const apiUrl = baseURL + "/auth/session";
 
   try {
     const response = await fetch(apiUrl, {
@@ -117,7 +127,7 @@ function showLoginScreen() {
   document.getElementById("logoutButton").style.display = "none";
 }
 
-//Shows the main content and hides hte login screen
+//Shows the main content and hides the login screen
 function showMainContent() {
   document.getElementById("loginSection").style.display = "none";
   document.getElementById("mainContent").style.display = "flex";
@@ -126,7 +136,7 @@ function showMainContent() {
 
 //Loads in the the PWNed information cards
 function displayPwnedInfo() {
-  const apiUrl = "http://localhost:8080/pwned/pwnedemail";
+  const apiUrl = baseURL + "/pwned/pwnedemail";
 
   fetch(apiUrl, {
     method: "GET",
@@ -200,7 +210,7 @@ function renderPwnedCard(data) {
 
 //Loads in the the Google data and calls method to render it
 function displayGoogleInfo() {
-  const apiUrl = "http://localhost:8080/details/gmail";
+  const apiUrl = baseURL + "/details/gmail";
 
   fetch(apiUrl, {
     method: "GET",
@@ -220,7 +230,7 @@ function displayGoogleInfo() {
 
 function renderGoogleInfo(data) {
   const googleInfoItem = document.createElement("section");
-  googleInfoItem.classList.add("googleInfoContent");
+  googleInfoItem.classList.add("infoContent");
 
   for (const key in data) {
     if (Object.hasOwnProperty.call(data, key)) {
@@ -232,7 +242,7 @@ function renderGoogleInfo(data) {
         switch (key) {
           case "photos":
             heading.textContent = "Profile Picture:";
-            const imageContainer = document.createElement("div");
+            const imageContainer = document.createElement("section");
             imageContainer.classList.add("imageContainer");
             const image = document.createElement("img");
             image.src = value.url;
@@ -264,7 +274,7 @@ function renderGoogleInfo(data) {
             paragraph.textContent = `${birthday.day} ${monthWord}`;
             break;
           case "occupations":
-            heading.textContent = "Occupations:";
+            heading.textContent = "Occupation:";
             paragraph.textContent = value.value;
             break;
           default:
@@ -277,4 +287,96 @@ function renderGoogleInfo(data) {
   }
 
   document.getElementById("googleInfoContainer").appendChild(googleInfoItem);
+}
+
+//Loads in the the Github data and calls method to render it
+function displayGitHubInfo() {
+  const apiUrl = baseURL + "/details/github";
+
+  fetch(apiUrl, {
+    method: "GET",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch: " + response.statusText);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      renderGitHubInfo(data);
+    })
+    .catch((error) => console.error("Failed to fetch Github data:", error));
+}
+
+function renderGitHubInfo(data) {
+  const githubInfoItem = document.createElement("section");
+  githubInfoItem.classList.add("infoContent");
+
+  for (const key in data) {
+    if (Object.hasOwnProperty.call(data, key)) {
+      const value = data[key];
+      if (value) {
+        const heading = document.createElement("h4");
+        const paragraph = document.createElement("p");
+
+        switch (key) {
+          case "avatar_url":
+            heading.textContent = "Profile Picture:";
+            const imageContainer = document.createElement("section");
+            const image = document.createElement("img");
+            image.src = value;
+            image.alt = "Profile Picture";
+            imageContainer.appendChild(heading);
+            imageContainer.appendChild(image);
+            githubInfoItem.appendChild(imageContainer);
+            break;
+          case "name":
+            heading.textContent = "Name:";
+            paragraph.textContent = value;
+            githubInfoItem.appendChild(heading);
+            githubInfoItem.appendChild(paragraph);
+            break;
+          case "location":
+            heading.textContent = "Location:";
+            paragraph.textContent = value;
+            githubInfoItem.appendChild(heading);
+            githubInfoItem.appendChild(paragraph);
+            break;
+          case "email":
+            heading.textContent = "Email:";
+            paragraph.textContent = value;
+            githubInfoItem.appendChild(heading);
+            githubInfoItem.appendChild(paragraph);
+            break;
+          case "followers":
+            heading.textContent = "Followers:";
+            paragraph.textContent = value;
+            githubInfoItem.appendChild(heading);
+            githubInfoItem.appendChild(paragraph);
+            break;
+          case "following":
+            heading.textContent = "Following:";
+            paragraph.textContent = value;
+            githubInfoItem.appendChild(heading);
+            githubInfoItem.appendChild(paragraph);
+            break;
+          case "bio":
+            heading.textContent = "Bio:";
+            paragraph.textContent = value;
+            githubInfoItem.appendChild(heading);
+            githubInfoItem.appendChild(paragraph);
+            break;
+          case "twitter_username":
+            heading.textContent = "Twitter Username:";
+            paragraph.textContent = value;
+            githubInfoItem.appendChild(heading);
+            githubInfoItem.appendChild(paragraph);
+            break;
+        }
+      }
+    }
+  }
+
+  document.getElementById("githubInfoContainer").appendChild(githubInfoItem);
 }
