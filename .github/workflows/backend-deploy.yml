@@ -60,8 +60,8 @@ jobs:
         working-directory: backend
         run: | 
           ls -la
-          ls -la .ebextentions/
-          cat .ebextentions/environmentvariables.config
+          ls -la .ebextensions/
+          cat .ebextensions/environmentvariables.config
            
 
       - name: Zip application
