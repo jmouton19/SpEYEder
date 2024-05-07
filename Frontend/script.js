@@ -67,7 +67,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 //Performs the login
 function login() {
-  //TODO: This route will change
   const backendUrl = "http://localhost:8080/auth/login";
   window.location.href = backendUrl;
 }
