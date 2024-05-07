@@ -41,7 +41,7 @@ jobs:
       - name: Configure ENV variables
         working-directory: backend
         run: |
-          mkdir .ebextentions
+          mkdir .ebextensions
           echo 'option_settings:
             aws:elasticbeanstalk:application:environment:
               DB_USER: ${{ vars.DB_USER }} 
