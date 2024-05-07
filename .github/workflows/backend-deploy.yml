@@ -52,3 +52,4 @@ jobs:
             environment_name: 'speyeder-env'
             version_label: 'v${{ github.run_number }}'
             deployment_package: 'backend/application.zip'
+            wait_for_environment_recovery: 180
