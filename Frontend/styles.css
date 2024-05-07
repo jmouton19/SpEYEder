@@ -79,7 +79,6 @@ body {
 
 #mainContent {
   display: none;
-  flex-wrap: wrap;
 }
 
 .spider {
@@ -88,8 +87,7 @@ body {
 }
 
 .dataBreach {
-  width: 18vw;
-  height: 80vh;
+  min-width: 18%;
   display: flex;
   justify-content: space-between;
   padding: 1vh 1vw;
@@ -201,13 +199,12 @@ body {
 .cardContent {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 
 .flipCard {
   background-color: transparent;
-  min-width: 500px;
-  height: 40vh;
+  min-width: 32vw; /* TODO: Need to set a "fixed" value to trigger the stacking of the cards on a smaller screen */
+  min-height: 42vh;
   padding: 0.5em;
   margin: 0 0.5em;
 }
@@ -238,7 +235,6 @@ body {
   backface-visibility: hidden;
 }
 .flipCardFront {
-  height: 40vh;
   background: rgba(217, 217, 217, 1);
   font-size: 16px;
 }
@@ -261,7 +257,6 @@ body {
   column-count: 2;
   column-gap: 20px;
   padding: 15vh 0;
-  height: 35vh;
 }
 
 .infoContent h4 {
