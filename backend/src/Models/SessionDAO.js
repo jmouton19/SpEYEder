@@ -19,10 +19,11 @@ const sessionDAO = {
     );
   },
 
-  async getSessionById(sessionId) {
+  async getValidSessionById(sessionId) {
+    const now = new Date();
     const { rows } = await pool.query(
-      `SELECT * FROM ${tableName} WHERE session_id = $1;`,
-      [sessionId]
+      `SELECT * FROM ${tableName} WHERE session_id = $1 AND expires_at > $2;`,
+      [sessionId, now]
     );
     if (rows.length === 0) return null;
     const row = rows[0];

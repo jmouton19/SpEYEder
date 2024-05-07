@@ -5,6 +5,7 @@ const {
   logout,
   authGithub,
   githubAuthCallback,
+  checkSession,
 } = require("../controllers/authController");
 const authenticateSession = require("../middleware/authMiddleware");
 
@@ -15,6 +16,7 @@ router.get("/google/callback", googleAuthCallback);
 
 router.get("/github", authenticateSession, authGithub);
 router.get("/github/callback", authenticateSession, githubAuthCallback);
+router.get("/session", authenticateSession, checkSession);
 router.post("/logout", authenticateSession, logout);
 
 module.exports = router;

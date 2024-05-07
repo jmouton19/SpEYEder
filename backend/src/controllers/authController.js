@@ -7,6 +7,10 @@ const userAuthCompanyDAO = require("../models/userAuthCompanyDAO");
 const provider = require("../models/provider");
 const config = require("../config");
 
+const checkSession = (req, res) => {
+  res.sendStatus(200);
+};
+
 const login = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
@@ -21,6 +25,7 @@ const login = (req, res) => {
   const authUrl = `${rootUrl}?${querystring.stringify(options)}`;
   res.redirect(authUrl);
 };
+
 const googleAuthCallback = (req, res) => {
   const { code } = req.query;
   const values = querystring.stringify({
@@ -232,4 +237,5 @@ module.exports = {
   googleAuthCallback,
   authGithub,
   githubAuthCallback,
+  checkSession,
 };
