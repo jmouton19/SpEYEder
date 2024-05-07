@@ -38,7 +38,7 @@ jobs:
         working-directory: backend
         run: npm install
 
-      - name: Install dependencies
+      - name: Configure ENV variables
         working-directory: backend
         run: |
           mkdir .ebextentions
@@ -55,6 +55,14 @@ jobs:
               FRONTEND_URL: http://d1xn5na94.cloudfront.net
               PWNED_API_KEY: ${{ secrets.PWNED_API_KEY }}
               PORT: 8080' > .ebextensions/environmentvariables.config
+
+      - name: Configure ENV variables
+        working-directory: backend
+        run: | 
+          ls -la
+          ls -la .ebextentions/
+          cat .ebextentions/environmentvariables.config
+           
 
       - name: Zip application
         working-directory: backend
