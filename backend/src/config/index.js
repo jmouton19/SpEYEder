@@ -9,6 +9,11 @@ const config = {
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   redirectUri: process.env.REDIRECT_URI,
 
+  // GitHub OAuth settings
+  githubClientId: process.env.GITHUB_CLIENT_ID,
+  githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
+  githubRedirectUri: process.env.GITHUB_REDIRECT_URI,
+
   // Frontend URL
   frontendUrl: process.env.FRONTEND_URL,
 

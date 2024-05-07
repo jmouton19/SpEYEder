@@ -9,7 +9,7 @@ const authenticateSession = async (req, res, next) => {
   }
 
   try {
-    const session = await sessionDAO.getSessionById(sessionID);
+    const session = await sessionDAO.getValidSessionById(sessionID);
     if (!session) {
       return res
         .status(403)

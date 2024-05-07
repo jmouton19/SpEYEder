@@ -30,4 +30,8 @@ app.get("/test", authenticateSession, (req, res) => {
   res.json({ message: "Authenticated!", user: req.user });
 });
 
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "best api eu" });
+});
+
 module.exports = app;
