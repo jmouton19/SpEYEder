@@ -101,14 +101,101 @@ const googleAuthCallback = (req, res) => {
         res.redirect(`${config.frontendUrl}`);
       } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Login failed" });
+        res.status(500).json({ error: "Login failed - db" });
       }
     });
   });
 
   tokenRequest.on("error", (e) => {
     console.error(e);
-    res.status(500).json({ error: "Login failed" });
+    res.status(500).json({ error: "Login failed - network" });
+  });
+
+  tokenRequest.write(values);
+  tokenRequest.end();
+};
+
+const authGithub = (req, res) => {
+  const rootUrl = "https://github.com/login/oauth/authorize";
+  const options = {
+    client_id: config.githubClientId,
+    redirect_uri: config.githubRedirectUri,
+    scope: "user,repo",
+    state: "rand", //very random string kappa
+  };
+
+  const authUrl = `${rootUrl}?${querystring.stringify(options)}`;
+  res.redirect(authUrl);
+};
+
+const githubAuthCallback = (req, res) => {
+  const { code, state } = req.query;
+  const values = querystring.stringify({
+    code,
+    client_id: config.githubClientId,
+    client_secret: config.githubClientSecret,
+    redirect_uri: config.githubRedirectUri,
+    state,
+    grant_type: "authorization_code",
+  });
+
+  const tokenOptions = {
+    hostname: "github.com",
+    path: "/login/oauth/access_token",
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  };
+
+  const tokenRequest = https.request(tokenOptions, (tokenResponse) => {
+    let data = "";
+    tokenResponse.on("data", (chunk) => {
+      data += chunk;
+    });
+    tokenResponse.on("end", async () => {
+      try {
+        const { access_token } = JSON.parse(data);
+        const refresh_token = null;
+
+        const userId = req.session.userId;
+
+        const existingAuth =
+          await userAuthCompanyDAO.findUserAuthCompanyByUserIdAndProvider(
+            userId,
+            provider.GITHUB
+          );
+        if (existingAuth) {
+          await userAuthCompanyDAO.updateUserAuthCompany(
+            userId,
+            provider.GITHUB,
+            access_token,
+            refresh_token,
+            null
+          );
+        } else {
+          await userAuthCompanyDAO.addUserAuthCompany(
+            userId,
+            provider.GITHUB,
+            access_token,
+            refresh_token,
+            null
+            //new Date(Date.now() + expires_in * 1000)
+          );
+        }
+
+        res.redirect(`${config.frontendUrl}`);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed GitHub Oauth - db" });
+      }
+    });
+  });
+
+  tokenRequest.on("error", (error) => {
+    console.error(error);
+    res.status(500).json({ error: "Failed GitHub Oauth - network" });
   });
 
   tokenRequest.write(values);
@@ -139,10 +226,10 @@ const logout = async (req, res) => {
   }
 };
 
-module.exports = logout;
-
 module.exports = {
   logout,
   login,
   googleAuthCallback,
+  authGithub,
+  githubAuthCallback,
 };
