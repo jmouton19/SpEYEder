@@ -38,11 +38,38 @@ jobs:
         working-directory: backend
         run: npm install
 
+      - name: Configure ENV variables
+        working-directory: backend
+        run: |
+          mkdir .ebextensions
+          echo 'option_settings:
+            aws:elasticbeanstalk:application:environment:
+              DB_USER: ${{ vars.DB_USER }} 
+              DB_HOST: rds-db.c68ft3jbsleb.eu-west-1.rds.amazonaws.com
+              DB_DATABASE: ${{ vars.DB_USER }} 
+              DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+              DB_PORT: 5432
+              GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+              GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+              REDIRECT_URI: http://speyeder-env.eba-nkypmppicbeanstalk.com/auth/google/callback
+              FRONTEND_URL: http://d1xn5na94.cloudfront.net
+              PWNED_API_KEY: ${{ secrets.PWNED_API_KEY }}
+              PORT: 8080' > .ebextensions/environmentvariables.config
+
+      - name: Configure ENV variables
+        working-directory: backend
+        run: | 
+          ls -la
+          ls -la .ebextensions/
+          cat .ebextensions/environmentvariables.config
+           
+
       - name: Zip application
         working-directory: backend
         run: zip -r application.zip . 
 
       - name: Deploy to Elastic Beanstalk
+        timeout-minutes: 4
         uses: einaregilsson/beanstalk-deploy@v15
         with:
             aws_access_key: ${{ steps.creds.outputs.aws-access-key-id }}
@@ -52,3 +79,4 @@ jobs:
             environment_name: 'speyeder-env'
             version_label: 'v${{ github.run_number }}'
             deployment_package: 'backend/application.zip'
+            wait_for_environment_recovery: 180

@@ -61,7 +61,7 @@ const googleAuthCallback = (req, res) => {
             user.userId,
             provider.GOOGLE
           );
-        if (!existingAuth.length) {
+        if (!existingAuth) {
           await userAuthCompanyDAO.updateUserAuthCompany(
             user.userId,
             provider.GOOGLE,
