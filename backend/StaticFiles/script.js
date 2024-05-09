@@ -161,6 +161,7 @@ function showLoginScreen() {
   document.getElementById("loginSection").style.display = "flex";
   document.getElementById("mainContent").style.display = "none";
   document.getElementById("logoutButton").style.display = "none";
+  document.getElementById("header").style.justifyContent = "center";
 }
 
 //Shows the main content and hides the login screen
@@ -187,6 +188,9 @@ function displayPwnedInfo() {
     .then((data) => {
       data.forEach(renderPwnedCard);
       document.getElementById("checkPwnedButton").style.display = "none";
+      document
+        .getElementById("dataBreachContainer")
+        .classList.add("showScrollbar");
     })
     .catch((error) => console.error("Failed to fetch Pwned data:", error));
 }
@@ -209,18 +213,18 @@ function renderPwnedCard(data) {
     return dataClassElement;
   });
 
-  const nameAndLogoContainer = document.createElement("div");
+  const nameAndLogoContainer = document.createElement("section");
   nameAndLogoContainer.classList.add("nameAndLogoContainer");
-
-  const companyName = document.createElement("h4");
-  companyName.textContent = data.Name;
-  nameAndLogoContainer.appendChild(companyName);
 
   const logoImage = document.createElement("img");
   logoImage.classList.add("dataBreachCardLogo");
   logoImage.src = data.LogoPath;
   logoImage.alt = "Company Logo";
   nameAndLogoContainer.appendChild(logoImage);
+
+  const companyName = document.createElement("h4");
+  companyName.textContent = data.Name;
+  nameAndLogoContainer.appendChild(companyName);
 
   const breachDateHeader = document.createElement("h5");
   breachDateHeader.textContent = "Breach Date:";
@@ -335,11 +339,13 @@ function displayGitHubInfo() {
   })
     .then((response) => {
       if (!response.ok) {
+        document.getElementById("githubLoginButton").style.display = "flex";
         throw new Error("Failed to fetch: " + response.statusText);
       }
       return response.json();
     })
     .then((data) => {
+      document.getElementById("githubLoginButton").style.display = "none";
       renderGitHubInfo(data);
     })
     .catch((error) => console.error("Failed to fetch Github data:", error));
