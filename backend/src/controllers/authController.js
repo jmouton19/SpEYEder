@@ -88,7 +88,7 @@ const authGithub = (req, res) => {
     client_id: config.githubClientId,
     redirect_uri: config.githubRedirectUri,
     scope: "user,repo",
-    state: "rand", // very random string kappa
+    state: req.session.sessionId,
   };
 
   const authUrl = `${rootUrl}?${querystring.stringify(options)}`;
@@ -123,9 +123,11 @@ const githubAuthCallback = async (req, res) => {
 
     if (!response.ok) throw new Error("Failed to retrieve GitHub token");
 
+    const session = await sessionDAO.getValidSessionById(state);
+
     const { access_token } = data;
     await userAuthCompanyDAO.updateOrCreateUserAuthCompany(
-      req.session.userId,
+      session.userId,
       provider.GITHUB,
       access_token,
       null,
