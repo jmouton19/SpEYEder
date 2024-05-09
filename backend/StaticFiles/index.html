@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <section class="header">
+    <section id="header">
+      <section></section>
       <h1 id="mainHeader">SpEYEder</h1>
-      <button id="logoutButton">Logout</button>
-      <button id="githubLoginButton">Login into Github</button>
+      <button id="logoutButton">Logout <i class="logoutLogo"></i></button>
     </section>
 
     <section id="loginSection">
@@ -44,7 +44,6 @@
           <section class="flipCardInner">
             <section class="flipCardFront">
               <img src="./assets/googleLogo.png" alt="Google Logo" />
-              <h2>Hover to see what they know 👀</h2>
             </section>
             <section id="googleInfoContainer" class="flipCardBack"></section>
           </section>
@@ -54,16 +53,18 @@
           <section class="flipCardInner">
             <section class="flipCardFront">
               <img src="./assets/githubLogo.png" alt="GitHub Logo" />
-              <h2>Hover to see what they know 👀</h2>
             </section>
-            <section id="githubInfoContainer" class="flipCardBack"></section>
+            <section id="githubInfoContainer" class="flipCardBack">
+              <button id="githubLoginButton">
+                <i class="githubLogo"></i>Login with Github
+              </button>
+            </section>
           </section>
         </section>
         <section class="flipCard">
           <section class="flipCardInner">
             <section class="flipCardFront">
               <img src="./assets/instagramLogo.png" alt="Instagram Logo" />
-              <h2>Hover to see what they know 👀</h2>
             </section>
             <section class="flipCardBack">Coming soon...</section>
           </section>
@@ -73,13 +74,12 @@
           <section class="flipCardInner">
             <section class="flipCardFront">
               <img src="./assets/facebookLogo.png" alt="Google Logo" />
-              <h2>Hover to see what they know 👀</h2>
             </section>
             <section class="flipCardBack">Coming soon...</section>
           </section>
         </section>
       </section>
-      <img class="spider" src="./assets/spider.png" alt="Spider Image" />
+      <!-- <img class="spider" src="./assets/spider.png" alt="Spider Image" /> -->
     </section>
 
     <script src="script.js"></script>
