@@ -15,7 +15,7 @@ router.get("/login", login);
 router.get("/google/callback", googleAuthCallback);
 
 router.get("/github", authenticateSession, authGithub);
-router.get("/github/callback", authenticateSession, githubAuthCallback);
+router.get("/github/callback", githubAuthCallback);
 router.get("/session", authenticateSession, checkSession);
 router.post("/logout", authenticateSession, logout);
 
