@@ -1,5 +1,4 @@
 const querystring = require("querystring");
-const jwt = require("jsonwebtoken");
 const userDAO = require("../Models/UserDAO");
 const sessionDAO = require("../Models/SessionDAO");
 const userAuthCompanyDAO = require("../Models/UserAuthCompanyDAO");
