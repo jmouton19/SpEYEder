@@ -1,4 +1,3 @@
-const https = require("https");
 const { cleanGmailProfileData } = require("../utils/gmailProfileDataCleaner");
 const userAuthCompanyDAO = require("../Models/UserAuthCompanyDAO");
 const provider = require("../Models/Provider");
@@ -26,37 +25,28 @@ const getGoogleUserData = async (req, res) => {
       accessToken = authDetails.accessToken;
     }
 
-    const options = {
-      hostname: "people.googleapis.com",
-      path: "/v1/people/me?personFields=addresses,ageRanges,biographies,birthdays,emailAddresses,genders,locales,names,nicknames,occupations,organizations,phoneNumbers,photos,urls",
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
+    const response = await fetch(
+      `https://people.googleapis.com/v1/people/me?personFields=addresses,ageRanges,biographies,birthdays,emailAddresses,genders,locales,names,nicknames,occupations,organizations,phoneNumbers,photos,urls`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
-    const request = https.request(options, (response) => {
-      let data = "";
-      response.on("data", (chunk) => {
-        data += chunk;
-      });
-      response.on("end", () => {
-        if (response.statusCode === 200) {
-          const formattedData = cleanGmailProfileData(JSON.parse(data));
-          res.json(formattedData);
-        } else {
-          res.status(500).json({ message: "Failed to fetch user data" });
-        }
-      });
-    });
+    const data = await response.json();
 
-    request.on("error", (error) => {
-      res.status(500).json({ error: "Failed to fetch user data" });
-    });
-
-    request.end();
+    if (response.ok) {
+      const formattedData = cleanGmailProfileData(data);
+      res.json(formattedData);
+    } else {
+      res
+        .status(response.status)
+        .json({ message: "Failed to fetch user data" });
+    }
   } catch (error) {
-    res.status(500).json({ message: "Error processing your request" });
+    res.status(500).json({ error: "Failed to fetch user data" });
   }
 };
 
@@ -71,50 +61,32 @@ const getGitHubUserData = async (req, res) => {
         provider.GITHUB
       );
 
-    //if (!authDetails || new Date() >= new Date(authDetails.expiresIn)) {
     if (!authDetails) {
       return res
         .status(401)
         .json({ message: "GitHub authentication required." });
     }
-    //accessToken = await refreshGithubTokens(userId, authDetails.refreshToken);
-    //} else {
     accessToken = authDetails.accessToken;
-    // }
 
-    const paths = ["/user"];
-
-    const options = {
-      hostname: "api.github.com",
-      path: paths,
+    const response = await fetch(`https://api.github.com/user`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "User-Agent": "SpEYEder",
       },
-    };
-
-    const request = https.request(options, (response) => {
-      let data = "";
-      response.on("data", (chunk) => {
-        data += chunk;
-      });
-      response.on("end", () => {
-        if (response.statusCode === 200) {
-          res.json(JSON.parse(data));
-        } else {
-          res.status(500).json({ message: "Failed to fetch GitHub user data" });
-        }
-      });
     });
 
-    request.on("error", (error) => {
-      res.status(500).json({ error: "Failed to fetch GitHub user data" });
-    });
+    const data = await response.json();
 
-    request.end();
+    if (response.ok) {
+      res.json(data);
+    } else {
+      res
+        .status(response.status)
+        .json({ message: "Failed to fetch GitHub user data" });
+    }
   } catch (error) {
-    res.status(500).json({ message: "Error processing your GitHub request" });
+    res.status(500).json({ error: "Failed to fetch GitHub user data" });
   }
 };
 
