@@ -84,6 +84,7 @@ const testDataGithub = {
 };
 
 const baseURL = config.frontendUrl;
+const baseURL = config.frontendUrl;
 document.addEventListener("DOMContentLoaded", async function () {
   //On website load check if the user is logged in to determine what screen to show
   let isUserLoggedIn = await checkIfLoggedIn();
