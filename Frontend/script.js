@@ -81,8 +81,6 @@ const testDataGithub = {
   },
 };
 
-require("dotenv").config();
-
 const baseURL =
   "http://speyeder-env.eba-nkypmpps.eu-west-1.elasticbeanstalk.com";
 document.addEventListener("DOMContentLoaded", async function () {
