@@ -50,4 +50,15 @@ jobs:
       - name: Terraform Apply
         working-directory: Terraform
         run: terraform apply -auto-approve -var "password=${{ secrets.DB_PASSWORD }}"
+
+      # - name: Terraform Plan Destroy
+      #   working-directory: Terraform
+      #   run: terraform plan -destroy
+
+      # - name: Terraform Destroy
+      #   working-directory: Terraform
+      #   run: terraform destroy -auto-approve
+
+      
+
       
