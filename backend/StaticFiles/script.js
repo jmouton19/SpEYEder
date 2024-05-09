@@ -103,6 +103,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   document.getElementById("logoutButton").addEventListener("click", logOut);
   document.getElementById("googleLoginButton").addEventListener("click", login);
   document
+    .getElementById("googleLoginButtonOnCard")
+    .addEventListener("click", login);
+  document
     .getElementById("githubLoginButton")
     .addEventListener("click", githubLogin);
 });
@@ -258,11 +261,14 @@ function displayGoogleInfo() {
   })
     .then((response) => {
       if (!response.ok) {
+        document.getElementById("googleLoginButtonOnCard").style.display =
+          "flex";
         throw new Error("Failed to fetch: " + response.statusText);
       }
       return response.json();
     })
     .then((data) => {
+      document.getElementById("googleLoginButtonOnCard").style.display = "none";
       renderGoogleInfo(data);
     })
     .catch((error) => console.error("Failed to fetch Google data:", error));
@@ -411,6 +417,12 @@ function renderGitHubInfo(data) {
             break;
           case "twitter_username":
             heading.textContent = "Twitter Username:";
+            paragraph.textContent = value;
+            githubInfoItem.appendChild(heading);
+            githubInfoItem.appendChild(paragraph);
+            break;
+          case "public_repos":
+            heading.textContent = "Public Repositories:";
             paragraph.textContent = value;
             githubInfoItem.appendChild(heading);
             githubInfoItem.appendChild(paragraph);

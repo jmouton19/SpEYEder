@@ -356,7 +356,7 @@ body {
   position: relative;
 }
 
-#githubLoginButton {
+.CardLoginButton {
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -367,6 +367,15 @@ body {
   width: 5em;
   height: 5em;
   background-image: url("./assets/githubLogo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.googleLogo {
+  display: inline-block;
+  width: 5em;
+  height: 5em;
+  background-image: url("./assets/googleLogo.png");
   background-size: contain;
   background-repeat: no-repeat;
 }
