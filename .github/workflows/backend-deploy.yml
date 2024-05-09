@@ -1,4 +1,4 @@
-name: Uplaod Node.js App to AWS Beanstalk
+name: Upload Node.js App to AWS Beanstalk
 
 on:
   push:
