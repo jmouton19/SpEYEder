@@ -163,7 +163,7 @@ async function checkIfLoggedIn() {
 
 //Shows the login screen + hides the main content
 function showLoginScreen() {
-  document.getElementById("loginSection").style.display = "flex";
+  document.getElementById("loginSection").style.display = "grid";
   document.getElementById("mainContent").style.display = "none";
   document.getElementById("logoutButton").style.display = "none";
   document.getElementById("header").style.justifyContent = "center";
