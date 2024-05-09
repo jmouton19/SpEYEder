@@ -70,8 +70,8 @@ const googleAuthCallback = async (req, res) => {
     const expTime = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
     res.cookie("sessionID", session.sessionId, {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: false,
+      sameSite: "Strict",
       maxAge: expTime,
     });
 
@@ -145,8 +145,8 @@ const logout = async (req, res) => {
     await sessionDAO.deleteSession(sessionId);
     res.clearCookie("sessionID", {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: false,
+      sameSite: "Strict",
     });
     res.sendStatus(200);
   } catch (error) {
