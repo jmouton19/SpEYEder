@@ -46,6 +46,40 @@ const testGoogleData = {
   },
 };
 
+const testDataGithub = {
+  login: "jmouton19",
+  id: 122820899,
+  node_id: "U_kgDOB1IZIw",
+  avatar_url: "https://avatars.githubusercontent.com/u/122820899?v=4",
+  type: "User",
+  site_admin: false,
+  name: "JC Mouton",
+  company: null,
+  blog: "",
+  location: "Cape Town, South Africa",
+  email: "jmouton19@gmail.com",
+  hireable: null,
+  bio: null,
+  twitter_username: null,
+  public_repos: 6,
+  public_gists: 0,
+  followers: 1,
+  following: 1,
+  created_at: "2023-01-16T17:47:09Z",
+  updated_at: "2024-05-06T12:28:14Z",
+  private_gists: 0,
+  total_private_repos: 4,
+  owned_private_repos: 4,
+  disk_usage: 93366,
+  collaborators: 1,
+  two_factor_authentication: false,
+  plan: {
+    name: "pro",
+    space: 976562499,
+    collaborators: 0,
+    private_repos: 9999,
+  },
+};
 const baseURL = "http://localhost:8080";
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -56,6 +90,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     displayGoogleInfo();
     displayGitHubInfo();
     // renderGoogleInfo(testGoogleData);
+    // renderGitHubInfo(testDataGithub);
   } else {
     showLoginScreen();
   }
