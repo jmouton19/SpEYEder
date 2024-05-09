@@ -4,6 +4,7 @@ const sessionDAO = require("../Models/SessionDAO");
 const userAuthCompanyDAO = require("../Models/UserAuthCompanyDAO");
 const provider = require("../Models/Provider");
 const config = require("../config");
+const jwt = require("jsonwebtoken");
 
 const checkSession = (req, res) => {
   res.sendStatus(200);
