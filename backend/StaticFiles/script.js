@@ -1,6 +1,6 @@
-const baseURL = "http://localhost:8080";
-// const baseURL =
-//   "http://speyeder-env.eba-nkypmpps.eu-west-1.elasticbeanstalk.com";
+// const baseURL = "http://localhost:8080";
+const baseURL =
+  "http://speyeder-env.eba-nkypmpps.eu-west-1.elasticbeanstalk.com";
 document.addEventListener("DOMContentLoaded", async function () {
   //On website load check if the user is logged in to determine what screen to show
   let isUserLoggedIn = await checkIfLoggedIn();
