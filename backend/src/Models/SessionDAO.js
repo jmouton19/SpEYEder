@@ -9,7 +9,7 @@ const sessionDAO = {
              VALUES ($1, $2, $3) RETURNING *;`,
       [userId, expiresAt, data]
     );
-    if (rows.length === 0) return null;
+    if (rows.length === 0) return undefined;
     return session(
       rows[0].session_id,
       userId,
@@ -25,7 +25,7 @@ const sessionDAO = {
       `SELECT * FROM ${tableName} WHERE session_id = $1 AND expires_at > $2;`,
       [sessionId, now]
     );
-    if (rows.length === 0) return null;
+    if (rows.length === 0) return undefined;
     const row = rows[0];
     return session(
       row.session_id,

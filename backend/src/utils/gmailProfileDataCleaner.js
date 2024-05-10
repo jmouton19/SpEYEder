@@ -1,3 +1,5 @@
+//gpt made this :)
+
 const cleanGmailProfileData = (data) => {
   let result = {};
 
