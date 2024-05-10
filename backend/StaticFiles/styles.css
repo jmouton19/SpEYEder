@@ -1,7 +1,7 @@
 html,
 body {
-  height: 100%; /* ensures that the html and body tags take up at least the full height of the viewport */
-  min-height: 100vh; /* viewport height, ensures that body is never shorter than the viewport */
+  height: 100%;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -10,7 +10,7 @@ body {
 body {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* changed from center to flex-start to expand downwards */
+  justify-content: flex-start;
   align-items: center;
   font-family: sans-serif;
   background-image: url("./assets/web.png");
@@ -46,6 +46,7 @@ body {
 }
 
 #toggleButton {
+  cursor: pointer;
   visibility: hidden;
   margin-left: 1em;
   border-color: transparent;
@@ -67,52 +68,45 @@ body {
   background-repeat: no-repeat;
 }
 
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 #loginSection {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   color: white;
   background: rgb(65, 63, 63);
-  margin-top: 20vh;
   height: 30rem;
-  padding: 1vh;
+  padding: 2rem;
   justify-content: center;
-  justify-self: center;
-  align-items: center;
+  align-content: center;
   box-shadow: 0 0 1em rgba(105, 93, 93);
   border-radius: 1rem;
 }
 
-@media (max-width: 48rem) {
-  #loginSection {
-    margin-top: 10vh;
-  }
-}
-
 .loginHeadings {
-  padding-left: 1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-content: center;
 }
 
 .loginHeadings h1 {
   font-size: 3rem;
-  margin: 0;
-  text-align: center;
 }
+
 .loginHeadings h3 {
   font-size: 1.8rem;
   margin: 0;
   color: red;
 }
 
-.loginSpiderImage {
-  max-width: 100%;
-  height: 100%;
-}
-
 #googleLoginButton {
+  margin-top: 8vh;
   border: transparent;
   border-radius: 0.5em;
   padding: 0.5em;
