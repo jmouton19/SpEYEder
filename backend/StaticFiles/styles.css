@@ -129,14 +129,6 @@ body {
   justify-content: center;
 }
 
-@media (max-width: 48rem) {
-  #mainContent {
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-  }
-}
-
 #checkPwnedButton {
   border: transparent;
   border-radius: 0.5em;
@@ -156,12 +148,6 @@ body {
   flex-wrap: wrap;
   background-position: center;
   background-repeat: no-repeat;
-}
-
-@media (max-width: 48rem) {
-  .cardContent {
-    justify-content: center;
-  }
 }
 
 .flipCard {
@@ -266,13 +252,6 @@ body {
   color: #5bff66;
 }
 
-@media (max-width: 48rem) {
-  .flipCard {
-    width: 80vw;
-    min-height: 42vh;
-  }
-}
-
 .dataBreachCard {
   width: inherit;
   overflow-y: auto;
@@ -309,4 +288,21 @@ body {
   padding: 1em;
   height: 4em;
   background: #dddddd;
+}
+
+@media (max-width: 48rem) {
+  .flipCard {
+    width: 80vw;
+    min-height: 42vh;
+  }
+
+  .cardContent {
+    justify-content: center;
+  }
+
+  #mainContent {
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+  }
 }
