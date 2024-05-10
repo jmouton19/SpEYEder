@@ -2,8 +2,7 @@ const { pwnedApiKey } = require("../config");
 const userDAO = require("../Models/UserDAO");
 
 const checkPwned = async (req, res) => {
-  let email =
-    req.query.email || (await userDAO.findUserById(req.session.userId)).email;
+  const email = (await userDAO.findUserById(req.session.userId)).email;
 
   if (!email) {
     return res.status(400).json({ message: "Email is required." });

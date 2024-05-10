@@ -80,9 +80,9 @@ const testDataGithub = {
     private_repos: 9999,
   },
 };
-//const baseURL = "http://localhost:8080";
-const baseURL =
-  "http://speyeder-env.eba-nkypmpps.eu-west-1.elasticbeanstalk.com";
+const baseURL = "http://localhost:8080";
+// const baseURL =
+//   "http://speyeder-env.eba-nkypmpps.eu-west-1.elasticbeanstalk.com";
 document.addEventListener("DOMContentLoaded", async function () {
   //On website load check if the user is logged in to determine what screen to show
   let isUserLoggedIn = await checkIfLoggedIn();
@@ -134,7 +134,7 @@ async function logOut() {
       showLoginScreen();
     }
   } catch (error) {
-    console.error("Failed to fetch Pwned data:", error);
+    console.error("Logout error:", error);
   }
 }
 
@@ -183,10 +183,17 @@ function displayPwnedInfo() {
     credentials: "include",
   })
     .then((response) => {
-      if (!response.ok) {
+      if (response.status === 404) {
+        const noBreachText = document.createElement("h4");
+        noBreachText.textContent = "No Breaches Found";
+        noBreachText.classList.add("noBreachText");
+        document
+          .getElementById("dataBreachContainer")
+          .appendChild(noBreachText);
+        document.getElementById("checkPwnedButton").style.display = "none";
+      } else if (!response.ok) {
         throw new Error("Failed to fetch: " + response.statusText);
-      }
-      return response.json();
+      } else return response.json();
     })
     .then((data) => {
       data.forEach(renderPwnedCard);

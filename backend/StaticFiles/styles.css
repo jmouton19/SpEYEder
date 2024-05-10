@@ -412,3 +412,7 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
 }
+
+.noBreachText {
+  color: #5bff66;
+}
