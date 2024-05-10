@@ -8,7 +8,7 @@
   </head>
   <body>
     <section id="header">
-      <section></section>
+      <button id="toggleButton">Show your Breached Data</button>
       <h1 id="mainHeader">SpEYEder</h1>
       <button id="logoutButton">Logout <i class="logoutLogo"></i></button>
     </section>
@@ -24,26 +24,12 @@
           id="googleLoginButton"
         />
       </section>
-      <!-- <section class="loginSpiderImage">
-        <img class="spider" src="./assets/spider.png" alt="Spider Image" />
-      </section> -->
     </section>
 
     <section id="mainContent">
-      <aside class="dataBreach">
-        <section class="dataBreachHeading">
-          <h2>Data Breaches</h2>
-          <img
-            class="pwnedLogo"
-            src="./assets/pwnedLogo.png"
-            alt="Have I been PWNed Logo"
-          />
-        </section>
-        <div id="dataBreachContainer"></div>
-        <button id="checkPwnedButton">Have I been Pwned?</button>
-      </aside>
+      <section id="dataBreachContainer" class="cardContent"></section>
 
-      <section class="cardContent">
+      <section id="cardContainerContainer" class="cardContent">
         <section class="flipCard">
           <section class="flipCardInner">
             <section class="flipCardFront">
@@ -86,29 +72,7 @@
             <section class="flipCardBack">Coming soon...</section>
           </section>
         </section>
-
-        <section class="flipCard">
-          <section class="flipCardInner">
-            <section class="flipCardFront"></section>
-            <section class="flipCardBack">Coming soon...</section>
-          </section>
-        </section>
-
-        <section class="flipCard">
-          <section class="flipCardInner">
-            <section class="flipCardFront"></section>
-            <section class="flipCardBack">Coming soon...</section>
-          </section>
-        </section>
-
-        <section class="flipCard">
-          <section class="flipCardInner">
-            <section class="flipCardFront"></section>
-            <section class="flipCardBack">Coming soon...</section>
-          </section>
-        </section>
       </section>
-      <!-- <img class="spider" src="./assets/spider.png" alt="Spider Image" /> -->
     </section>
 
     <script src="script.js"></script>

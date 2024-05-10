@@ -1,85 +1,3 @@
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-const testGoogleData = {
-  names: {
-    displayName: "Liam Talberg",
-    familyName: "Talberg",
-    givenName: "Liam",
-    displayNameLastFirst: "Talberg, Liam",
-    unstructuredName: "Liam Talberg",
-  },
-  photos: {
-    url: "https://lh3.googleusercontent.com/a/ACg8ocIkhU2g9k1YNo_6kdSQsey4ivGTUnZAKUaiQs_K3QLv4JfUhCU=s100",
-  },
-  emailAddresses: {
-    value: "liamtalberg@gmail.com",
-  },
-  phoneNumbers: {
-    value: "+1234567890",
-  },
-
-  genders: {
-    value: "male",
-    formattedValue: "Male",
-  },
-  birthdays: {
-    date: {
-      month: 6,
-      day: 3,
-    },
-  },
-  occupations: {
-    value: "Dev",
-  },
-};
-
-const testDataGithub = {
-  login: "jmouton19",
-  id: 122820899,
-  node_id: "U_kgDOB1IZIw",
-  avatar_url: "https://avatars.githubusercontent.com/u/122820899?v=4",
-  type: "User",
-  site_admin: false,
-  name: "JC Mouton",
-  company: null,
-  blog: "",
-  location: "Cape Town, South Africa",
-  email: "jmouton19@gmail.com",
-  hireable: null,
-  bio: null,
-  twitter_username: null,
-  public_repos: 6,
-  public_gists: 0,
-  followers: 1,
-  following: 1,
-  created_at: "2023-01-16T17:47:09Z",
-  updated_at: "2024-05-06T12:28:14Z",
-  private_gists: 0,
-  total_private_repos: 4,
-  owned_private_repos: 4,
-  disk_usage: 93366,
-  collaborators: 1,
-  two_factor_authentication: false,
-  plan: {
-    name: "pro",
-    space: 976562499,
-    collaborators: 0,
-    private_repos: 9999,
-  },
-};
 const baseURL = "http://localhost:8080";
 // const baseURL =
 //   "http://speyeder-env.eba-nkypmpps.eu-west-1.elasticbeanstalk.com";
@@ -90,16 +8,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     showMainContent();
     displayGoogleInfo();
     displayGitHubInfo();
-    // renderGoogleInfo(testGoogleData);
-    // renderGitHubInfo(testDataGithub);
+    displayPwnedInfo();
   } else {
     showLoginScreen();
   }
 
   //Create listeners for all the buttons
-  document
-    .getElementById("checkPwnedButton")
-    .addEventListener("click", displayPwnedInfo);
   document.getElementById("logoutButton").addEventListener("click", logOut);
   document.getElementById("googleLoginButton").addEventListener("click", login);
   document
@@ -108,6 +22,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   document
     .getElementById("githubLoginButton")
     .addEventListener("click", githubLogin);
+  document
+    .getElementById("toggleButton")
+    .addEventListener("click", toggleContent);
 });
 
 //Performs the login
@@ -163,15 +80,16 @@ async function checkIfLoggedIn() {
 function showLoginScreen() {
   document.getElementById("loginSection").style.display = "flex";
   document.getElementById("mainContent").style.display = "none";
-  document.getElementById("logoutButton").style.display = "none";
-  document.getElementById("header").style.justifyContent = "center";
+  document.getElementById("toggleButton").style.visibility = "hidden";
+  document.getElementById("logoutButton").style.visibility = "hidden";
 }
 
 //Shows the main content and hides the login screen
 function showMainContent() {
   document.getElementById("loginSection").style.display = "none";
   document.getElementById("mainContent").style.display = "flex";
-  document.getElementById("logoutButton").style.display = "flex";
+  document.getElementById("toggleButton").style.visibility = "visible";
+  document.getElementById("logoutButton").style.visibility = "visible";
 }
 
 //Loads in the the PWNed information cards
@@ -184,25 +102,33 @@ function displayPwnedInfo() {
   })
     .then((response) => {
       if (response.status === 404) {
-        const noBreachText = document.createElement("h4");
-        noBreachText.textContent = "No Breaches Found";
-        noBreachText.classList.add("noBreachText");
-        document
-          .getElementById("dataBreachContainer")
-          .appendChild(noBreachText);
-        document.getElementById("checkPwnedButton").style.display = "none";
+        noBreachedData();
       } else if (!response.ok) {
         throw new Error("Failed to fetch: " + response.statusText);
       } else return response.json();
     })
     .then((data) => {
       data.forEach(renderPwnedCard);
-      document.getElementById("checkPwnedButton").style.display = "none";
-      document
-        .getElementById("dataBreachContainer")
-        .classList.add("showScrollbar");
     })
     .catch((error) => console.error("Failed to fetch Pwned data:", error));
+}
+
+function noBreachedData() {
+  const cardContent = document.getElementById("dataBreachContainer");
+  cardContent.style.display = "flex";
+  cardContent.style.alignContent = "center";
+  cardContent.style.justifyContent = "center";
+
+  const textContainer = document.createElement("section");
+  textContainer.classList.add("noDataBreach");
+
+  const displayText = document.createElement("h3");
+  displayText.textContent = "No Breached Data!";
+  displayText.style.color = "Green";
+
+  textContainer.appendChild(displayText);
+
+  cardContent.appendChild(textContainer);
 }
 
 //Render Pwned info card and add it to the parent container
@@ -211,7 +137,6 @@ function renderPwnedCard(data) {
   dataBreachCard.classList.add("dataBreachCard");
 
   const dataBreachCardText = document.createElement("section");
-  dataBreachCardText.classList.add("dataBreachCardText");
 
   const dataClassesArray = Array.isArray(data.DataClasses)
     ? data.DataClasses
@@ -223,18 +148,9 @@ function renderPwnedCard(data) {
     return dataClassElement;
   });
 
-  const nameAndLogoContainer = document.createElement("section");
-  nameAndLogoContainer.classList.add("nameAndLogoContainer");
-
   const logoImage = document.createElement("img");
-  logoImage.classList.add("dataBreachCardLogo");
   logoImage.src = data.LogoPath;
   logoImage.alt = "Company Logo";
-  nameAndLogoContainer.appendChild(logoImage);
-
-  const companyName = document.createElement("h4");
-  companyName.textContent = data.Name;
-  nameAndLogoContainer.appendChild(companyName);
 
   const breachDateHeader = document.createElement("h5");
   breachDateHeader.textContent = "Breach Date:";
@@ -245,7 +161,7 @@ function renderPwnedCard(data) {
   const leakedDataHeader = document.createElement("h5");
   leakedDataHeader.textContent = "What was leaked:";
 
-  dataBreachCardText.appendChild(nameAndLogoContainer);
+  dataBreachCardText.appendChild(logoImage);
   dataBreachCardText.appendChild(breachDateHeader);
   dataBreachCardText.appendChild(breachDate);
   dataBreachCardText.appendChild(leakedDataHeader);
@@ -255,7 +171,7 @@ function renderPwnedCard(data) {
 
   dataBreachCard.appendChild(dataBreachCardText);
 
-  document.getElementById("dataBreachContainer").appendChild(dataBreachCard);
+  createFlipCard(dataBreachCard, data.LogoPath, data.Name);
 }
 
 //Loads in the the Google data and calls method to render it
@@ -440,4 +356,62 @@ function renderGitHubInfo(data) {
   }
 
   document.getElementById("githubInfoContainer").appendChild(githubInfoItem);
+}
+
+let toggle = false;
+
+function createFlipCard(cardContentInner, logoURL, companyName) {
+  const flipCardSection = document.createElement("section");
+  flipCardSection.classList.add("flipCard");
+
+  const flipCardInnerSection = document.createElement("section");
+  flipCardInnerSection.classList.add("flipCardInner");
+
+  const flipCardFrontSection = document.createElement("section");
+  flipCardFrontSection.classList.add("flipCardFront");
+
+  const dataBreachCardFront = document.createElement("section");
+
+  const companyNameElement = document.createElement("h4");
+  companyNameElement.textContent = companyName;
+
+  const logoImage = document.createElement("img");
+  logoImage.src = logoURL;
+  logoImage.alt = "Company Logo";
+
+  dataBreachCardFront.appendChild(logoImage);
+  dataBreachCardFront.appendChild(companyNameElement);
+
+  flipCardFrontSection.appendChild(dataBreachCardFront);
+
+  const flipCardBackSection = document.createElement("section");
+  flipCardBackSection.classList.add("flipCardBack");
+
+  flipCardInnerSection.appendChild(flipCardFrontSection);
+  flipCardInnerSection.appendChild(flipCardBackSection);
+
+  flipCardBackSection.appendChild(cardContentInner);
+
+  flipCardSection.appendChild(flipCardInnerSection);
+
+  const cardContent = document.getElementById("dataBreachContainer");
+  cardContent.appendChild(flipCardSection);
+}
+
+function toggleContent() {
+  const cardContent = document.getElementById("cardContainerContainer");
+  const breachContent = document.getElementById("dataBreachContainer");
+  const toggleButton = document.getElementById("toggleButton");
+
+  if (!toggle) {
+    cardContent.style.display = "none";
+    breachContent.style.display = "flex";
+    toggleButton.textContent = "Show your Public Data";
+  } else {
+    cardContent.style.display = "flex";
+    breachContent.style.display = "none";
+    toggleButton.textContent = "Show your Breached Data";
+  }
+
+  toggle = !toggle;
 }

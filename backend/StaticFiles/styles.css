@@ -32,16 +32,25 @@ body {
 }
 
 #mainHeader {
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 #logoutButton {
+  visibility: hidden;
   margin-right: 1em;
   border-color: transparent;
   border-radius: 0.5em;
   background: white;
   display: flex;
   align-items: center;
+}
+
+#toggleButton {
+  visibility: hidden;
+  margin-left: 1em;
+  border-color: transparent;
+  border-radius: 0.5em;
+  background: white;
 }
 
 #logoutButton:hover {
@@ -73,7 +82,7 @@ body {
   border-radius: 1rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   #loginSection {
     margin-top: 10vh;
   }
@@ -126,156 +135,12 @@ body {
   justify-content: center;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   #mainContent {
     flex-direction: column;
     align-content: center;
     justify-content: center;
   }
-}
-
-.spider {
-  max-width: 7vw;
-  height: 18vh;
-}
-
-.dataBreach {
-  width: auto;
-  display: flex;
-  flex-direction: row;
-  padding: 1vh 1vw;
-  flex-direction: column;
-  background: rgba(24, 24, 24, 1);
-}
-
-@media (max-width: 768px) {
-  .dataBreach {
-    margin-right: 0;
-    width: 100vw;
-    max-width: 100vw;
-    min-height: auto;
-    flex-direction: column;
-  }
-}
-
-.dataBreachHeading {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-}
-
-.dataBreachHeading h2 {
-  font-size: 1.3em;
-}
-
-.dataBreachCard {
-  display: flex;
-  flex-direction: column;
-  margin: 1vh;
-  padding: 0.5em;
-  width: auto;
-  background: rgba(217, 217, 217, 1);
-}
-
-@media (max-width: 768px) {
-  .dataBreachHeading {
-    margin-left: 1em;
-  }
-
-  .dataBreachCard {
-    flex-direction: column;
-    width: auto;
-  }
-}
-
-#dataBreachContainer {
-  flex-direction: column;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-@media (max-width: 768px) {
-  #dataBreachContainer {
-    height: auto;
-    width: 100vw;
-    display: flex;
-    flex-direction: row;
-    overflow-y: hidden;
-    overflow-x: scroll;
-  }
-
-  #dataBreachContainer.showScrollbar::-webkit-scrollbar {
-    display: block;
-  }
-}
-
-@media (min-width: 769px) {
-  #dataBreachContainer::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-#dataBreachContainer::-webkit-scrollbar {
-  display: none;
-}
-
-#dataBreachContainer::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 10.8em;
-}
-
-#dataBreachContainer::-webkit-scrollbar-track {
-  background-color: #eee;
-}
-
-.dataBreachCardLogo {
-  width: calc(2.5vw + 2.5vh);
-  height: auto;
-}
-.nameAndLogoContainer {
-  display: flex;
-  flex-direction: row;
-}
-
-.nameAndLogoContainer img {
-  align-self: center;
-  margin-right: 1em;
-}
-
-.nameAndLogoContainer h4 {
-  align-self: center;
-}
-
-.dataBreachCardText h4,
-.dataBreachCardText h5,
-.dataBreachCardText h6 {
-  white-space: normal;
-  overflow: unset;
-  text-overflow: unset;
-  margin: 0;
-}
-
-.dataBreachCardText h5 {
-  margin: 0.5em 0;
-}
-
-.dataBreachCardText h6 {
-  font-weight: 300;
-}
-
-.dataBreachCardText {
-  margin-bottom: 0;
-}
-
-.dataBreach h2 {
-  color: white;
-  text-decoration: underline;
-}
-
-.pwnedLogo {
-  width: auto;
-  height: 5rem;
 }
 
 #checkPwnedButton {
@@ -299,25 +164,17 @@ body {
   background-repeat: no-repeat;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   .cardContent {
     justify-content: center;
   }
 }
 
 .flipCard {
-  background-color: transparent;
-  width: 30vw;
+  width: 40vw;
   min-height: 42vh;
   padding: 0.5em;
   margin: 0 0.5em;
-}
-
-@media (max-width: 768px) {
-  .flipCard {
-    width: 80vw;
-    min-height: 42vh;
-  }
 }
 
 .flipCardInner {
@@ -352,8 +209,8 @@ body {
   cursor: pointer;
 }
 .flipCardFront {
-  background: #ffffff;
-  font-size: 16px;
+  background: #dddddd;
+  font-size: 1rem;
   justify-content: center;
   align-items: center;
 }
@@ -364,17 +221,15 @@ body {
 }
 
 .flipCardBack {
-  background: rgba(217, 217, 217, 1);
   transform: rotateY(180deg);
-  background: #ffffff;
+  background: #dddddd;
 }
 
 .infoContent {
+  align-content: center;
   width: inherit;
-  column-count: 2;
-  column-gap: 20px;
   padding: 1rem 0;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .infoContent img {
@@ -415,4 +270,49 @@ body {
 
 .noBreachText {
   color: #5bff66;
+}
+
+@media (max-width: 48rem) {
+  .flipCard {
+    width: 80vw;
+    min-height: 42vh;
+  }
+}
+
+.dataBreachCard {
+  width: inherit;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+
+#dataBreachContainer {
+  display: none;
+}
+
+#dataBreachContainer img {
+  width: 5rem;
+  height: auto;
+}
+
+#dataBreachContainer h5 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+#dataBreachContainer h6 {
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 300;
+}
+
+.noDataBreach {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  box-shadow: 0 0 1em rgba(105, 93, 93);
+  border-radius: 1rem;
+  padding: 1em;
+  height: 4em;
+  background: #dddddd;
 }
