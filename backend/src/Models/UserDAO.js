@@ -9,7 +9,7 @@ const userDAO = {
       `INSERT INTO ${tableName} (email) VALUES ($1) RETURNING *;`,
       [email]
     );
-    if (rows.length === 0) return null;
+    if (rows.length === 0) return undefined;
     return user(rows[0].user_id, rows[0].email, rows[0].created_at);
   },
 
@@ -18,7 +18,7 @@ const userDAO = {
       `SELECT * FROM ${tableName} WHERE email = $1;`,
       [email]
     );
-    if (rows.length === 0) return null;
+    if (rows.length === 0) return undefined;
     return user(rows[0].user_id, rows[0].email, rows[0].created_at);
   },
   async findUserById(userId) {
@@ -26,7 +26,7 @@ const userDAO = {
       `SELECT * FROM ${tableName} WHERE user_id = $1;`,
       [userId]
     );
-    if (rows.length === 0) return null;
+    if (rows.length === 0) return undefined;
     return user(rows[0].user_id, rows[0].email, rows[0].created_at);
   },
 };

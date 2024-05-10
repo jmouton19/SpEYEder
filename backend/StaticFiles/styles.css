@@ -1,10 +1,16 @@
+html,
 body {
+  height: 100%; /* ensures that the html and body tags take up at least the full height of the viewport */
+  min-height: 100vh; /* viewport height, ensures that body is never shorter than the viewport */
   margin: 0;
   padding: 0;
-  height: 100%;
+  width: 100vw;
+}
+
+body {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* changed from center to flex-start to expand downwards */
   align-items: center;
   font-family: sans-serif;
   background-image: url("./assets/web.png");
@@ -38,6 +44,10 @@ body {
   align-items: center;
 }
 
+#logoutButton:hover {
+  cursor: pointer;
+}
+
 .logoutLogo {
   display: inline-block;
   width: 2em;
@@ -52,27 +62,38 @@ body {
   display: flex;
   flex-direction: row;
   color: white;
-  background: rgba(50, 48, 48, 0.9);
-  height: 50vh;
-  width: 50vw;
+  background: rgb(65, 63, 63);
   margin-top: 20vh;
-  justify-content: space-between;
-  align-items: left;
+  height: 30rem;
+  padding: 1vh;
+  justify-content: center;
+  justify-self: center;
+  align-items: center;
+  box-shadow: 0 0 1em rgba(105, 93, 93);
+  border-radius: 1rem;
+}
+
+@media (max-width: 768px) {
+  #loginSection {
+    margin-top: 10vh;
+  }
 }
 
 .loginHeadings {
   padding-left: 1em;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
+  align-items: center;
 }
 
 .loginHeadings h1 {
-  font-size: calc(2.5vw + 2.5vh);
+  font-size: 3rem;
   margin: 0;
+  text-align: center;
 }
 .loginHeadings h3 {
-  font-size: calc(1.5vw + 1.5vh);
+  font-size: 1.8rem;
   margin: 0;
   color: red;
 }
@@ -86,17 +107,20 @@ body {
   border: transparent;
   border-radius: 0.5em;
   padding: 0.5em;
-  height: 10vh;
-  width: 10vw;
+  width: 15rem;
   font-size: calc(0.6vw + 0.6vh);
-  background: white;
 }
 
 #googleLoginButton:hover {
-  background: rgba(225, 225, 225, 0.95);
+  cursor: pointer;
+}
+
+#googleLoginButton:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 #mainContent {
+  height: 90vh;
   display: none;
   align-content: center;
   justify-content: center;
@@ -116,11 +140,9 @@ body {
 }
 
 .dataBreach {
-  width: 29vw;
+  width: auto;
   display: flex;
-  margin-right: 10vw;
   flex-direction: row;
-  justify-content: space-between;
   padding: 1vh 1vw;
   flex-direction: column;
   background: rgba(24, 24, 24, 1);
@@ -131,7 +153,7 @@ body {
     margin-right: 0;
     width: 100vw;
     max-width: 100vw;
-    min-height: 30vh;
+    min-height: auto;
     flex-direction: column;
   }
 }
@@ -168,7 +190,6 @@ body {
 }
 
 #dataBreachContainer {
-  height: 70vh;
   flex-direction: column;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -266,9 +287,12 @@ body {
 
 #checkPwnedButton:hover {
   background: rgba(225, 225, 225, 0.95);
+  cursor: pointer;
 }
 
 .cardContent {
+  justify-content: center;
+  overflow-y: auto;
   display: flex;
   flex-wrap: wrap;
   background-position: center;
@@ -278,7 +302,6 @@ body {
 @media (max-width: 768px) {
   .cardContent {
     justify-content: center;
-    align-content: center;
   }
 }
 
@@ -321,9 +344,15 @@ body {
   height: 100%;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  border-radius: 1rem;
+  box-shadow: 0 0 1em rgba(105, 93, 93);
+}
+.flipCardFront:hover,
+.flipCardBack:hover {
+  cursor: pointer;
 }
 .flipCardFront {
-  background: rgba(217, 217, 217, 1);
+  background: #ffffff;
   font-size: 16px;
   justify-content: center;
   align-items: center;
@@ -337,6 +366,7 @@ body {
 .flipCardBack {
   background: rgba(217, 217, 217, 1);
   transform: rotateY(180deg);
+  background: #ffffff;
 }
 
 .infoContent {
@@ -360,6 +390,9 @@ body {
   font-size: 1rem;
   display: flex;
   align-items: center;
+}
+.CardLoginButton:hover {
+  cursor: pointer;
 }
 
 .githubLogo {

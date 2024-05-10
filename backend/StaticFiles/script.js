@@ -80,7 +80,7 @@ const testDataGithub = {
     private_repos: 9999,
   },
 };
-
+//const baseURL = "http://localhost:8080";
 const baseURL =
   "http://speyeder-env.eba-nkypmpps.eu-west-1.elasticbeanstalk.com";
 document.addEventListener("DOMContentLoaded", async function () {
