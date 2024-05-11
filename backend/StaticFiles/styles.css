@@ -154,7 +154,8 @@ body {
   transform-style: preserve-3d;
 }
 
-.flipCard:hover .flipCardInner {
+.flipCard:hover .flipCardInner,
+.flipCard:focus .flipCardInner .flipCard:active .flipCardInner {
   transform: rotateY(180deg);
 }
 
