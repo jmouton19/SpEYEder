@@ -81,7 +81,7 @@ body {
   background-color: black;
   justify-content: space-evenly;
   flex: 1 1 30%;
-  max-height: 90vh;
+  min-height: 90vh;
   align-items: center;
 }
 
@@ -98,7 +98,7 @@ body {
   justify-content: center; 
   flex: 1 1 70%;
   gap: 0.5em;
-  max-height: 90vh;
+  min-height: 90vh;
 }
 
 .image-container-1 {
