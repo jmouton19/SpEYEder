@@ -81,7 +81,7 @@ body {
   background-color: black;
   justify-content: space-evenly;
   flex: 1 1 30%;
-  min-height: 90vh;
+  height: 90vh;
   align-items: center;
 }
 
@@ -98,21 +98,23 @@ body {
   justify-content: center; 
   flex: 1 1 70%;
   gap: 0.5em;
-  min-height: 90vh;
+  height: 90vh;
+  min-width: 15rem;
 }
 
 .image-container-1 {
   margin: 0;
+  align-self: flex-start;
 }
 
 .image-container-2 {
   margin: 0;
-  /* align-self: center; */
-  /* justify-content: center; */
+  /* align-self: flex-start; */
 }
 
 .image-container-3 {
   margin: 0;
+  align-self: flex-end;
 }
 
 .image-container-4 {  
@@ -124,16 +126,15 @@ body {
 }
 
 .image-1 {
-  max-width: 10em;
+  max-width: 15em;
 }
 
 .login-button {
-  max-width: 10em;
+  max-width: 20em;
 }
 
 .image-2 {
-  max-width: 10em;
-  /* float: right; */
+  max-width: 15em;
 }
 
 .image-3 {
@@ -189,12 +190,11 @@ p {
 /* ******************** */
 
 #googleLoginButton {
-  margin-top: 8vh;
   border: transparent;
-  border-radius: 0.5em;
-  padding: 0.5em;
-  width: 15rem;
-  font-size: calc(0.6vw + 0.6vh);
+  /* border-radius: 0.5em; */
+  /* padding: 0.5em; */
+  max-width: 15rem;
+  /* font-size: calc(0.6vw + 0.6vh1); */
 }
 
 #googleLoginButton:hover {
