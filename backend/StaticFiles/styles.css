@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: 0;
   width: 100vw;
+  color: black;
 }
 
 body {
@@ -28,7 +29,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  text-align: center;
 }
 
 #mainHeader {
@@ -36,22 +36,15 @@ body {
 }
 
 #logoutButton {
+  display: flex;
+  flex-direction: column;
   visibility: hidden;
   margin-right: 1em;
   border-color: transparent;
   border-radius: 0.5em;
-  background: white;
   display: flex;
   align-items: center;
-}
-
-#toggleButton {
-  cursor: pointer;
-  visibility: hidden;
-  margin-left: 1em;
-  border-color: transparent;
-  border-radius: 0.5em;
-  background: white;
+  font-size: 0.9rem;
 }
 
 #logoutButton:hover {
@@ -62,10 +55,6 @@ body {
   display: inline-block;
   width: 2em;
   height: 2em;
-  margin-left: 0.5em;
-  background-image: url("./assets/logout.png");
-  background-size: contain;
-  background-repeat: no-repeat;
 }
 
 .loginContainer {
@@ -267,18 +256,6 @@ body {
   height: auto;
 }
 
-#dataBreachContainer h5 {
-  font-size: 1.5rem;
-  font-weight: 400;
-  margin: 0;
-}
-
-#dataBreachContainer h6 {
-  font-size: 1rem;
-  margin: 0;
-  font-weight: 300;
-}
-
 .noDataBreach {
   display: flex;
   align-content: center;
@@ -295,14 +272,60 @@ body {
     width: 80vw;
     min-height: 42vh;
   }
+}
 
-  .cardContent {
-    justify-content: center;
-  }
+.toggle {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.5rem;
+  width: 3.2rem;
+  height: 1.5rem;
+  background-color: #c9c6c6;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease-in;
+}
+.toggle::after {
+  content: "";
+  position: absolute;
+  top: 0.05rem;
+  left: 0.2rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.25s ease-out;
+}
 
-  #mainContent {
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-  }
+#toggleButton:checked + .toggle {
+  background-color: rgb(73, 72, 72);
+}
+
+#toggleButton:checked + .toggle::after {
+  transform: translateX(1.5rem);
+}
+
+.toggleButtonHide {
+  opacity: 0;
+  height: 0;
+  width: 0;
+}
+
+#toggleButton:hover + .toggleText {
+  display: inline;
+}
+
+.toggleText {
+  display: none;
+  color: white;
+  font-weight: 400;
+  font-size: 0.8rem;
+}
+
+#toggleButtonSection {
+  visibility: hidden;
+  margin-left: 1vw;
+  display: flex;
+  text-align: left;
+  flex-direction: column;
 }

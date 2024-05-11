@@ -3,7 +3,7 @@ const baseURL =
   "http://speyeder-env.eba-nkypmpps.eu-west-1.elasticbeanstalk.com";
 
 document.addEventListener("DOMContentLoaded", async function () {
-  //On website load check if the user is logged in to determine what screen to show
+  //On website load check if the user is logged in to determine what screen to show + what content
   let isUserLoggedIn = await checkIfLoggedIn();
   if (isUserLoggedIn) {
     showMainContent();
@@ -34,6 +34,7 @@ function login() {
   window.location.href = backendUrl;
 }
 
+//Login via GitHub
 function githubLogin() {
   const backendUrl = baseURL + "/auth/github";
   window.location.href = backendUrl;
@@ -56,7 +57,7 @@ async function logOut() {
   }
 }
 
-//Calls the refresh endpoint to check if the user is logged in
+//Calls the endpoint to check if the user is logged in
 async function checkIfLoggedIn() {
   const apiUrl = baseURL + "/auth/session";
 
@@ -81,19 +82,19 @@ async function checkIfLoggedIn() {
 function showLoginScreen() {
   document.getElementById("loginSection").style.display = "flex";
   document.getElementById("mainContent").style.display = "none";
-  document.getElementById("toggleButton").style.visibility = "hidden";
+  document.getElementById("toggleButtonSection").style.visibility = "hidden";
   document.getElementById("logoutButton").style.visibility = "hidden";
 }
 
-//Shows the main content and hides the login screen
+// Shows the main content and hides the login screen
 function showMainContent() {
   document.getElementById("loginSection").style.display = "none";
   document.getElementById("mainContent").style.display = "flex";
-  document.getElementById("toggleButton").style.visibility = "visible";
+  document.getElementById("toggleButtonSection").style.visibility = "visible";
   document.getElementById("logoutButton").style.visibility = "visible";
 }
 
-//Loads in the the PWNed information cards
+// Loads in the the PWNed information cards
 function displayPwnedInfo() {
   const apiUrl = baseURL + "/pwned/pwnedemail";
 
@@ -111,12 +112,33 @@ function displayPwnedInfo() {
     .then((data) => {
       data.forEach(renderPwnedCard);
     })
-    .catch((error) => console.error("Failed to fetch Pwned data:", error));
+    .catch((error) => {
+      breachedDataFailure();
+      console.error("Failed to fetch Pwned data:", error);
+    });
 }
 
+// Display message if breached data check fails
+function breachedDataFailure() {
+  const cardContent = document.getElementById("dataBreachContainer");
+  cardContent.style.alignContent = "center";
+  cardContent.style.justifyContent = "center";
+
+  const textContainer = document.createElement("section");
+  textContainer.classList.add("noDataBreach");
+
+  const displayText = document.createElement("h3");
+  displayText.textContent = "Failed to fetch breached data! Please try again.";
+  displayText.style.color = "Red";
+
+  textContainer.appendChild(displayText);
+
+  cardContent.appendChild(textContainer);
+}
+
+// Display message if user has no breached data
 function noBreachedData() {
   const cardContent = document.getElementById("dataBreachContainer");
-  cardContent.style.display = "flex";
   cardContent.style.alignContent = "center";
   cardContent.style.justifyContent = "center";
 
@@ -139,28 +161,28 @@ function renderPwnedCard(data) {
 
   const dataBreachCardText = document.createElement("section");
 
+  const logoImage = document.createElement("img");
+  logoImage.src = data.LogoPath;
+  logoImage.alt = "Company Logo";
+
+  const breachDateHeader = document.createElement("h4");
+  breachDateHeader.textContent = "Breach Date:";
+
+  const breachDate = document.createElement("p");
+  breachDate.textContent = data.BreachDate;
+
+  const leakedDataHeader = document.createElement("h4");
+  leakedDataHeader.textContent = "What was leaked:";
+
   const dataClassesArray = Array.isArray(data.DataClasses)
     ? data.DataClasses
     : [data.DataClasses];
 
   const dataClassesElements = dataClassesArray.map((dataClass) => {
-    const dataClassElement = document.createElement("h6");
+    const dataClassElement = document.createElement("p");
     dataClassElement.textContent = ` - ${dataClass}`;
     return dataClassElement;
   });
-
-  const logoImage = document.createElement("img");
-  logoImage.src = data.LogoPath;
-  logoImage.alt = "Company Logo";
-
-  const breachDateHeader = document.createElement("h5");
-  breachDateHeader.textContent = "Breach Date:";
-
-  const breachDate = document.createElement("h6");
-  breachDate.textContent = data.BreachDate;
-
-  const leakedDataHeader = document.createElement("h5");
-  leakedDataHeader.textContent = "What was leaked:";
 
   dataBreachCardText.appendChild(logoImage);
   dataBreachCardText.appendChild(breachDateHeader);
@@ -402,16 +424,16 @@ function createFlipCard(cardContentInner, logoURL, companyName) {
 function toggleContent() {
   const cardContent = document.getElementById("cardContainerContainer");
   const breachContent = document.getElementById("dataBreachContainer");
-  const toggleButton = document.getElementById("toggleButton");
+  const toggleText = document.getElementById("toggleText");
 
   if (!toggle) {
     cardContent.style.display = "none";
     breachContent.style.display = "flex";
-    toggleButton.textContent = "Show your Public Data";
+    toggleText.textContent = "Breached Data";
   } else {
     cardContent.style.display = "flex";
     breachContent.style.display = "none";
-    toggleButton.textContent = "Show your Breached Data";
+    toggleText.textContent = "Public Data";
   }
 
   toggle = !toggle;

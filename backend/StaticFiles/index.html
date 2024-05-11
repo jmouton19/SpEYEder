@@ -8,10 +8,18 @@
   </head>
   <body>
     <section id="header">
-      <button id="toggleButton">Show your Breached Data</button>
+      <section id="toggleButtonSection"> 
+        <input id="toggleButton" type="checkbox" class="toggleButtonHide"></input>
+        <label for="toggleButton" class="toggle"></label>
+        <label id="toggleText">Public Data</label>
+      </section>
       <h1 id="mainHeader">SpEYEder</h1>
-      <button id="logoutButton">Logout <i class="logoutLogo"></i></button>
+      <a id="logoutButton">
+        <img class="logoutLogo" src="./assets/logout.png"></img>
+        Logout
+      </a>
     </section>
+
 
     <section class="loginContainer">
       <section id="loginSection">
