@@ -425,18 +425,15 @@ function toggleContent() {
   const cardContent = document.getElementById("cardContainerContainer");
   const breachContent = document.getElementById("dataBreachContainer");
   const toggleText = document.getElementById("toggleText");
-  const toggleSection = document.getElementById("toggleButtonSection");
 
   if (!toggle) {
     cardContent.style.display = "none";
     breachContent.style.display = "flex";
     toggleText.textContent = "Breached Data";
-    toggleSection.style.fontSize = "0.6rem";
   } else {
     cardContent.style.display = "flex";
     breachContent.style.display = "none";
     toggleText.textContent = "Public Data";
-    toggleSection.style.fontSize = "0.7rem";
   }
 
   toggle = !toggle;

@@ -324,7 +324,7 @@ body {
   visibility: hidden;
   margin-left: 1vw;
   margin-right: auto;
-  font-size: 0.7rem;
+  font-size: calc(0.5em + 1vw);
   display: flex;
   text-align: left;
   flex-direction: column;
