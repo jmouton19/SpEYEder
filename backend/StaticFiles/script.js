@@ -118,15 +118,18 @@ function displayPwnedInfo() {
     credentials: "include",
   })
     .then((response) => {
-      if (response.status === 404) {
-        noBreachedData();
-        return;
-      } else if (!response.ok) {
+      if (!response.ok) {
         throw new Error("Failed to fetch: " + response.statusText);
+      } else if (response.status === 404) {
+        return [];
       } else return response.json();
     })
     .then((data) => {
-      data.forEach(renderPwnedCard);
+      if (data.length === 0) {
+        noBreachedData();
+      } else {
+        data.forEach(renderPwnedCard);
+      }
     })
     .catch((error) => {
       breachedDataFailure();
