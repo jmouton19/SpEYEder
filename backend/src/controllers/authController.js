@@ -78,7 +78,7 @@ const googleAuthCallback = async (req, res) => {
     res.redirect(`${config.frontendUrl}`);
   } catch (error) {
     console.error("Google Auth Callback Error:", error);
-    res.status(500).json({ error: "Login failed - network/db" });
+    //res.status(500).json({ error: "Login failed - network/db" });
     res.redirect(`${config.frontendUrl}`);
   }
 };
@@ -138,7 +138,7 @@ const githubAuthCallback = async (req, res) => {
     res.redirect(`${config.frontendUrl}`);
   } catch (error) {
     console.error("GitHub Auth Callback Error:", error);
-    res.status(500).json({ error: "Failed GitHub OAuth - network/db" });
+    //res.status(500).json({ error: "Failed GitHub OAuth - network/db" });
     res.redirect(`${config.frontendUrl}`);
   }
 };
