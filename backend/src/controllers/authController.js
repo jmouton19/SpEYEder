@@ -88,7 +88,7 @@ const authGithub = (req, res) => {
   const options = {
     client_id: config.githubClientId,
     redirect_uri: config.githubRedirectUri,
-    scope: "user,repo",
+    scope: "read:user",
     state: req.session.sessionId,
   };
 
