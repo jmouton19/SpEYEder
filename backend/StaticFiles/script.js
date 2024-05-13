@@ -118,7 +118,7 @@ function displayPwnedInfo() {
     credentials: "include",
   })
     .then((response) => {
-      if (!response.ok) {
+      if (!response.ok && response.status != 404) {
         throw new Error("Failed to fetch: " + response.statusText);
       } else if (response.status === 404) {
         return [];
