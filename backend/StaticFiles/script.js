@@ -1,3 +1,18 @@
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 // const baseURL = "http://localhost:8080";
 const baseURL =
   "http://speyeder-env.eba-nkypmpps.eu-west-1.elasticbeanstalk.com";
@@ -105,6 +120,7 @@ function displayPwnedInfo() {
     .then((response) => {
       if (response.status === 404) {
         noBreachedData();
+        return;
       } else if (!response.ok) {
         throw new Error("Failed to fetch: " + response.statusText);
       } else return response.json();
