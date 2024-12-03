@@ -56,50 +56,145 @@ body {
   height: 2em;
 }
 
-.loginContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+/* ****************************  */
+
 
 #loginSection {
+  margin: 0;
+  max-width: 100vw;
+  height: auto;
+  display: flex;
+}
+
+.content {
+  margin: 0;
+  display: flex;
+  width: 100vw;
+  height: auto;
+  flex-wrap: wrap-reverse;
+}
+
+.div-1 {
+  margin: 0;
   display: flex;
   flex-direction: column;
+  background-color: black;
+  justify-content: space-evenly;
+  flex: 1 1 30%;
+  height: 90vh;
+  align-items: center;
+}
+
+.div-1 figure {
+  margin: 0;
+}
+
+.div-2 {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  margin: 0;
+  background-color: #312f2f;
+  justify-content: center; 
+  flex: 1 1 70%;
+  gap: 0.5em;
+  height: 90vh;
+  min-width: 15rem;
+}
+
+.image-container-1 {
+  margin: 0;
+  align-self: flex-start;
+}
+
+.image-container-2 {
+  margin: 0;
+  /* align-self: flex-start; */
+}
+
+.image-container-3 {
+  margin: 0;
+  align-self: flex-end;
+}
+
+.image-container-4 {  
+  margin: 0;
+  grid-row-start: 1;
+  grid-row-end: 6;
+  grid-column-start: 6;
+  grid-column-end: 10;
+}
+
+.image-1 {
+  max-width: 15em;
+}
+
+.login-button {
+  max-width: 20em;
+}
+
+.image-2 {
+  max-width: 15em;
+}
+
+.image-3 {
+  float: right;
+  width: 100%;
+  height: 100%;
+}
+
+p {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin: 0;
+}
+
+.welcome-message {
+  grid-row-start: 3;
+  grid-row-end: 4;
+  grid-column-start: 1;
+  grid-column-end: 6;
+  justify-content: left;
+  margin: 0;
+  display: flex;
+  padding-left: 2em;
+}
+
+.bigger {
+  font-size: calc(16px + 4vw);
   color: white;
-  background: rgb(65, 63, 63);
-  height: 30rem;
-  padding: 2rem;
-  justify-content: center;
-  align-content: center;
-  box-shadow: 0 0 1em rgba(105, 93, 93);
-  border-radius: 1rem;
 }
 
-.loginHeadings {
+.red-message {
+  margin: 1em;
+  grid-row-start: 4;
+  grid-row-end: 5;
+  grid-column-start: 3;
+  grid-column-end: 8;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-content: center;
 }
 
-.loginHeadings h1 {
-  font-size: 3rem;
-}
+.red-message p {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+} 
 
-.loginHeadings h3 {
-  font-size: 1.8rem;
+.red {
   margin: 0;
   color: red;
+  font-size: calc(16px + 1vw);;
 }
 
+/* ******************** */
+
 #googleLoginButton {
-  margin-top: 8vh;
   border: transparent;
-  border-radius: 0.5em;
-  padding: 0.5em;
-  width: 15rem;
-  font-size: calc(0.6vw + 0.6vh);
+  /* border-radius: 0.5em; */
+  /* padding: 0.5em; */
+  max-width: 15rem;
+  /* font-size: calc(0.6vw + 0.6vh1); */
 }
 
 #googleLoginButton:hover {
